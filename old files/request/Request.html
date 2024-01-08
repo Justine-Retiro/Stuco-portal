@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StuCo Requests</title>
+    <link rel="stylesheet" href="requestStyle.css">
+   
+</head>
+<body>
+    <header>
+        <div class="user">
+            <img src="logo.png" alt="Picture">
+        </div>
+    
+        <nav class="navbar">
+            <ul>
+                <li><a href="http://localhost/stuco/OwnerLanding/OwnerLanding.html">Dashboard</a></li>
+                <li><a href="http://localhost/stuco/OwnerLanding/Notifications.html">Notification</a></li>
+                <li><a href="http://localhost/stuco/OwnerLanding/DocumentArchives.html">Document Archives</a></li>
+                <li><a href="http://localhost/stuco/OwnerLanding/Calendar.html">Calendar of Events</a></li>
+                <li><a href="">Account Manager</a></li>
+                <li><a href="http://localhost/stuco/Counsil/">Sign Out</a></li>
+            </ul>
+        </nav>
+    </header> 
+    
+    <div class="form-background">
+        <div class = "form-container">
+            <form action="" method="post">
+                <label for="from">From:</label>
+                <input type="text" id="from" name="from" required><br><br>
+                <label for="type">Type:</label>
+                <input type="text" id="type" name="type" required><br><br>
+                <label for="description">Description:</label>
+                <input type="text" id="description" name="description" required><br><br>
+                <input type="file" id="file" name="file" multiple>
+                <button type="submit">submit</button>
+            </form>
+         </div>
+    </div>  
+</body>
+</html>

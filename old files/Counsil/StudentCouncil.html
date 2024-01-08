@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StuCo Portal</title>
+    <link rel="stylesheet" href="StudentCouncil.css">
+</head>
+<body>
+    <header class="headings">
+        <img src="logo.png" alt="StuCo Logo">
+        <h1>Student Council Account<br>Log In</h1>
+    </header>
+
+    <div class="Container"> 
+        <form id="loginForm" method="post" action="StudentCouncil.php">
+            <div class="form-content">
+                <input type="text" name="username" id="username" placeholder="Username" required>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <select name="adminType" id="adminType">
+                    <option value="Cma">Cma</option>
+                    <option value="Coe">Coe</option>
+                    <option value="Cit">Cit</option>
+                    <option value="Ccje">Ccje</option>
+                    <option value="Cahs">Cahs</option>
+                </select>
+                
+                <button type="submit">Log In</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

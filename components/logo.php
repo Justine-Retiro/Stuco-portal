@@ -1,0 +1,1 @@
+<img src="/stuco/assets/logo.png" alt="Logo">

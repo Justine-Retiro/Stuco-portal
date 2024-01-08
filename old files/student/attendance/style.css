@@ -1,0 +1,78 @@
+
+*{
+    font-family: 'Nunito', sans-serif;
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+}
+
+body{
+    background: wheat;
+    overflow-x: hidden;
+    padding-left: 35rem;
+}
+
+header{
+    position: fixed;
+    top: 0; left: 0;
+    z-index: 1000;
+    height: 100%; width: 35rem;
+    background: #1c3360;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    text-align: center;
+}
+
+header .user img{
+    height: 17rem; width: 17rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+header .navibar{
+    width: 100%;
+}
+
+header .navibar ul{
+    list-style: none;
+    padding: 1rem 3rem;
+}
+
+header .navibar ul li a{
+    display: block;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    background: #333;
+    color: white;
+    font-size: 2rem;
+    border-radius: 5rem;
+}
+
+header .navibar ul li a:hover{
+    background: wheat;
+}
+.container{
+    text-align: center;
+}
+video{
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 1200px) {
+    html {
+        font-size: 45%;
+    }
+}
