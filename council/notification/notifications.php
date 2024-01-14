@@ -1,5 +1,5 @@
 <?php
- session_start();
+include '../api/session.php';
 if(isset($_SESSION['username'])){
     $username = $_SESSION['username'];
     $adminType = $_SESSION['adminType'];

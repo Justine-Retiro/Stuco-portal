@@ -26,12 +26,12 @@ if (isset($_SESSION['toastr'])) {
                     <div class="row">
                         <div class="col-lg-12 p-3 bg-light">
                             <div class="row rounded-top">
-                                <div class="col-lg-12 ">
+                                <div class="col-lg-12 d-flex justify-content-between align-items-center">
                                     <!-- Whole top bar -->
                                     <div class="row d-flex justify-content-between ">
-                                        <div class="col-lg-12 pb-3 w-100 bg-light d-flex justify-content-between align-items-center ">
-                                            <div class="py-1 d-flex align-items-center pe-4 ">
-                                                <div class="col-lg-12 d-flex align-items-center">
+                                        <div class="pb-3 w-auto bg-light d-flex justify-content-between align-items-center ">
+                                            <div class="col-lg-9 w-auto py-1 d-flex align-items-center pe-4 ">
+                                                <div class="d-flex align-items-center pe-4">
                                                     <div class="col-md-3 pe-2 w-auto" >
                                                         <button class="btn text-primary-emphasis fs-4 fw-medium filter-btn" onclick="userfilter('all')">All </button>
                                                     </div>
@@ -53,20 +53,23 @@ if (isset($_SESSION['toastr'])) {
                                                         <button class="btn text-primary-emphasis fs-4 fw-medium filter-btn" onclick="userfilter('adviser')">Adviser</button>
                                                     </div>
                                                     <div class="col-md-3 pe-2 w-auto" >
-                                                        <button class="btn text-primary-emphasis fs-4 fw-medium filter-btn" onclick="userfilter('council')">Council</button>
+                                                        <button class="btn text-primary-emphasis fs-4 fw-medium filter-btn" onclick="userfilter('student council')">Student Council</button>
                                                     </div>
                                                     <div class="col-md-3 pe-2 w-auto" >
                                                         <button class="btn text-primary-emphasis fs-4 fw-medium filter-btn" onclick="userfilter('student')">Student </button>
                                                     </div>
+                                                    <div class="col-md-3 pe-2 w-auto" >
+                                                        <button class="btn text-primary-emphasis fs-4 fw-medium filter-btn" onclick="userfilter('owner')">Owner </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3  d-flex justify-content-end" id="search-top-bar">
+                                            <div class="col-md-2 d-flex " id="search-top-bar">
                                                 <div class="input-group" >
                                                     <input class="form-control border rounded" type="text" placeholder="Search" id="search-input">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-13 me-5 d-flex justify-content-end">
-                                            <a href="new/new.php" class="text-decoration-none text-light"><button class="btn btn-primary btn-lg float-end">Add user</button></a>
+                                            <div class="col-md-3 ps-3 me-5 d-flex">
+                                                <a href="new/new.php" class="text-decoration-none text-light"><button class="btn btn-primary btn-lg ">Add user</button></a>
                                             </div>
                                         </div>
                                         <!-- Search bar -->

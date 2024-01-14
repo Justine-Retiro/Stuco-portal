@@ -1,7 +1,22 @@
+<?php
+function password($length = 10){
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $password = '';
+    for ($i = 0; $i < $length; $i++) {
+        $password .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $password;
+}
+
+$default_password = password();
+// echo $default_password;
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add User</title>
+    <title>Edit User</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -26,26 +41,30 @@
         <div class="row pt-4">
             <hr>
                 <div class="col-lg-12 mt-3">
-                    <form id="loginForm" action="../api/edit.php" method="post">
+                    <form id="updateForm" action="../api/edit.php" method="post">
                         <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;">
                         <!-- Reserved for error messages -->
                         </div>
+
                         <div class="input-group mb-3 input-group-lg">
                             <span class="input-group-text">Username</span>
-                            <input type="text" class="form-control" name="username" value="<?php echo $_GET['username'];?>" readonly>
+                            <input type="text" class="form-control" name="username" value="<?php echo $_GET['username'];?>" readonly required>
                         </div>
 
                         <div class="input-group mb-3 input-group-lg">
                             <span class="input-group-text">Default Password</span>
-                            <input type="password" id="password" class="form-control" name="password">
+                            <input type="password" id="password" class="form-control" name="password" required>
                         </div>
+
+                        <button id="generatePass" class="btn btn-primary mb-3 btn-lg" type="button">Generate password</button>
+
                         <label class="form-control mb-3">
                             <div class="p-2 d-flex fs-5 align-items-center">
                                 <input type="checkbox" id="show_password" class="me-3">
                                 <label for="show_password" class="text-dark mb-0">Show Password</label>
                             </div>
                         </label>
-                        
+
                         <div class="input-group mb-3 input-group-lg">
                             <label class="input-group-text text-dark mb-0" for="roles">Roles:</label>
                             <select class="form-select" id="roles" name="roles">
@@ -55,16 +74,18 @@
                                 <option value="Marketing">Marketing</option>
                                 <option value="GSD">GSD</option>
                                 <option value="COO">COO</option>
-                                <option value="Council head">Head Council</option>
-                                <option value="Council">Council</option>
+                                <option value="Adviser">Adviser</option>
+                                <option value="Owner">Owner</option>
+                                <option value="Student Council">Student Head Council</option>
                                 <option value="Student">Student</option>
                             </select>                            
                         </div>
 
                         <div class="input-group mb-3 input-group-lg">
                             <label class="input-group-text text-dark mb-0" for="user_type">User type:</label>
-                            <select class="form-select" id="user_type" name="user_type">
-                                <option value="admin" >Admin</option>
+                            <select class="form-select" id="user_type" name="user_type" readonly>
+                                <option value="owner">Owner</option>    
+                                <option value="admin">Admin</option>
                                 <option value="council">Council</option>
                                 <option value="student">Student</option>
                             </select>                            
@@ -90,7 +111,7 @@
                             </select>                            
                         </div> <br>
 
-                        <button class="btn btn-success btn-lg" type="submit">Add User</button>
+                        <button class="btn btn-success btn-lg" type="submit">Update User</button>
                     </form>
                 </div>
             </div>
@@ -103,25 +124,40 @@
 <script>
 $(document).ready(function(){
     
+    $('#generatePass').click(function(){
+        var password = "<?php echo $default_password; ?>";
+        $('#password').val(password);
+    });
+
     $('#roles').change(function(){
         var role = $(this).val();
 
-        if(role === 'Council' || role === 'Council head'){
-            $('#department').show().prop('disabled', false);
-            $('#branch').hide().prop('disabled', true);
-            $('#user_type').val('council').prop('disabled', true); // Set user type to 'council' and disable selection
-        } else if(role === 'Student') {
-            $('#department').show().prop('disabled', false);
-            $('#branch').show().prop('disabled', false);
-            $('#user_type').val('student').prop('disabled', true); // Set user type to 'student' and disable selection
+        if(role === 'Student Council'){
+            $('#department').show().prop('readonly', false);
+            $('#branch').hide().prop('readonly', true);
+            $('#user_type').val('council').prop('readonly', true); 
+        } else if (role === 'Adviser') {
+            $('#department').show().prop('readonly', false);
+            $('#branch').show().prop('readonly', true);
+            $('#user_type').val('admin').prop('readonly', true); 
+        } else if (role === 'Student') {
+            $('#department').show().prop('readonly', false);
+            $('#branch').show().prop('readonly', false);
+            $('#user_type').val('student').prop('readonly', true);
+        } else if (role === 'Owner') {
+            $('#department').hide().prop('readonly', true);
+            $('#branch').show().prop('readonly', false);
+            $('#user_type').val('owner').prop('readonly', true); 
         } else {
             $('#department').hide().prop('disabled', true);
-            $('#branch').show().prop('disabled', false);
-            $('#user_type').val('admin').prop('disabled', true); // Disable selection without changing the value
+            $('#branch').show().prop('readonly', false);
+            $('#user_type').val('admin').prop('readonly', true); 
         }
+
+        $('#hidden_user_type').val($('#user_type').val());
+
     });
 
-    // Trigger the change event on page load to set the initial state
     $('#roles').trigger('change');
 });
 </script>

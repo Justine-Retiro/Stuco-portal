@@ -47,17 +47,17 @@ $default_password = password();
 
                         <div class="input-group mb-3 input-group-lg">
                             <span class="input-group-text">First name</span>
-                            <input type="text" class="form-control" name="first_name" >
+                            <input type="text" class="form-control" name="first_name" required>
                         </div>
 
                         <div class="input-group mb-3 input-group-lg">
                             <span class="input-group-text">Last name</span>
-                            <input type="text" class="form-control" name="last_name" >
+                            <input type="text" class="form-control" name="last_name" required>
                         </div>
 
                         <div class="input-group mb-3 input-group-lg">
                             <span class="input-group-text">Username</span>
-                            <input type="text" class="form-control" name="username" >
+                            <input type="text" class="form-control" name="username" required>
                         </div>
 
                         <div class="input-group mb-3 input-group-lg">
@@ -81,6 +81,7 @@ $default_password = password();
                                 <option value="GSD">GSD</option>
                                 <option value="COO">COO</option>
                                 <option value="Adviser">Adviser</option>
+                                <option value="Owner">Owner</option>
                                 <option value="Student Council">Student Head Council</option>
                                 <option value="Student">Student</option>
                             </select>                            
@@ -89,6 +90,7 @@ $default_password = password();
                         <div class="input-group mb-3 input-group-lg">
                             <label class="input-group-text text-dark mb-0" for="user_type">User type:</label>
                             <select class="form-select" id="user_type" name="user_type" readonly>
+                                <option value="owner" >Owner</option>    
                                 <option value="admin" >Admin</option>
                                 <option value="council">Council</option>
                                 <option value="student">Student</option>
@@ -108,6 +110,7 @@ $default_password = password();
                         <div class="input-group mb-3 input-group-lg" id="department" style="display: none;">
                             <label class="input-group-text text-dark mb-0" for="department">Department:</label>
                             <select class="form-select" id="department" name="department">
+                                <option value="" selected>Select one</option>
                                 <option value="CMA">CMA</option>
                                 <option value="COE">COE</option>
                                 <option value="CIT">CIT</option>
@@ -136,14 +139,22 @@ $(document).ready(function(){
             $('#department').show().prop('disabled', false);
             $('#branch').hide().prop('disabled', true);
             $('#user_type').val('council').prop('disabled', true); // Set user type to 'council' and disable selection
+        } else if (role === 'Adviser') {
+            $('#department').show().prop('disabled', false);
+            $('#branch').show().prop('disabled', true);
+            $('#user_type').val('admin').prop('disabled', true); // Set user type to 'student' and disable selection
         } else if (role === 'Student') {
             $('#department').show().prop('disabled', false);
             $('#branch').show().prop('disabled', false);
             $('#user_type').val('student').prop('disabled', true); // Set user type to 'student' and disable selection
-        } else {
+        } else if (role === 'Owner') {
             $('#department').hide().prop('disabled', true);
             $('#branch').show().prop('disabled', false);
-            $('#user_type').val('admin').prop('disabled', true); // Disable selection without changing the value
+            $('#user_type').val('owner').prop('disabled', true); 
+        } else {
+            $('#department').hide().val('').prop('disabled', false);
+            $('#branch').show().prop('disabled', false);
+            $('#user_type').val('admin').prop('disabled', true); 
         }
 
         $('#hidden_user_type').val($('#user_type').val());

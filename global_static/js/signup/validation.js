@@ -34,7 +34,8 @@ $(document).ready(function(){
             type: 'POST',
             data: $(this).serialize(),
             success: function(response) {
-                var data = response;
+                // var data = response;
+                var data = JSON.parse(response);
                 if (data.status === 'success') {
                     sessionStorage.setItem('toastr', data.message);
                     window.location.href = 'student.php';

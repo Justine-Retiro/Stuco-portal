@@ -27,6 +27,14 @@ $(document).ready(function(){
         document.cookie = 'toastr=; expires=' + now.toUTCString() + '; path=/;';
     }
 
+    $('#show_password').change(function() {
+        if($(this).is(":checked")) {
+            $('#password').attr('type', 'text');
+        } else {
+            $('#password').attr('type', 'password');
+        }
+    });
+
     $('#loginForm').on('submit', function(event) {
         event.preventDefault();
         $.ajax({
@@ -35,10 +43,13 @@ $(document).ready(function(){
             data: $(this).serialize(),
             success: function(response) {
                 var data = response;
+                // var data = JSON.parse(response);
                 if (data.status === 'success') {
-                    toastr.success(data.message);
+                    sessionStorage.setItem('toastr', data.message);
                     window.location.href = '/student/dashboard.php';
-                } else if (data.status === 'fail') {
+                } else if (data.status === 'change_password') {
+                    window.location.href = '/password_change.php';
+                }else if (data.status === 'fail') {
                     $('#errorAlert').text(data.message).show();
                 }
             },

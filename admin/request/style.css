@@ -5,9 +5,7 @@
     text-decoration: none;
     outline: none;
     border: none;
-    text-transform: capitalize;
     transition: all .2s linear;
-    color: white;
 }
 
 html{
@@ -16,7 +14,8 @@ html{
 }
 
 body{
-    background: wheat;
+    font-size: 100%;;
+    /* background: wheat; */
     overflow-x: hidden;
     padding-left: 35rem;
 }
@@ -32,6 +31,7 @@ header{
     justify-content: center;
     flex-flow: column;
     text-align: center;
+    font-size: 62.5%;
 }
 
 header .user img{
@@ -64,52 +64,54 @@ header .navibar ul li a:hover{
     background: wheat;
 }
 
-        .form-background {
-            background-color: wheat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+.form-background {
+    background-color: wheat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-        .form-container {
-            background-color: #1c3360;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            width: 300px;
-            text-align: center;
-        }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        #adminType{
-            padding: 20px;
-        }
+label{
+    color: white;
+}
 
-        input[type="text"],
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+.form-container {
+    background-color: #1c3360;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+}
 
-        button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 20px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+label {
+    display: block;
+    margin-bottom: 5px;
+}
 
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
+input[type="text"],
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+} */
 
 
 
@@ -128,7 +130,7 @@ header .navibar ul li a:hover{
 
 
 @media (max-width: 1200px) {
-    html {
-        font-size: 45%;
-    }
+    /* html {
+        font-size: 15px;
+    } */
 }   

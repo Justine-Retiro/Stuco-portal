@@ -1,4 +1,3 @@
-
 *{
     font-family: 'Nunito', sans-serif;
     margin: 0; padding: 0;
@@ -16,7 +15,8 @@ html{
 }
 
 body{
-    background: wheat;
+    font-size: 100%;;
+    /* background: wheat; */
     overflow-x: hidden;
     padding-left: 35rem;
 }
@@ -32,6 +32,7 @@ header{
     justify-content: center;
     flex-flow: column;
     text-align: center;
+    font-size: 62.5%;
 }
 
 header .user img{
@@ -39,38 +40,88 @@ header .user img{
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 1rem;
-    border-color: wheat;
 }
 
-header .navbar{
+header .navibar{
     width: 100%;
 }
 
-header .navbar ul{
+header .navibar ul{
     list-style: none;
     padding: 1rem 3rem;
 }
 
-header .navbar ul li a{
+header .navibar ul li a{
     display: block;
     padding: 1rem;
     margin: 1.5rem 0;
     background: #333;
-    color: #fff;
+    color: white;
     font-size: 2rem;
     border-radius: 5rem;
 }
 
-header .navbar ul li a:hover{
+header .navibar ul li a:hover{
     background: wheat;
 }
-.container{
+
+.form-background {
+    background-color: wheat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+label{
+    color: white;
+}
+
+.form-container {
+    background-color: #1c3360;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 300px;
     text-align: center;
 }
-video{
-    max-width: 100%;
-    height: auto;
+
+label {
+    display: block;
+    margin-bottom: 5px;
 }
+
+input[type="text"],
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+} */
+
+
+
+
+
+
+
+
+
 
 
 
@@ -80,7 +131,7 @@ video{
 
 
 @media (max-width: 1200px) {
-    html {
-        font-size: 45%;
-    }
-}
+    /* html {
+        font-size: 15px;
+    } */
+}   

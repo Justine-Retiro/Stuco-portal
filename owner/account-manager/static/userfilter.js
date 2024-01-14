@@ -1,15 +1,15 @@
 function setActiveFilterButton(adminType) {
-    // Remove 'text-primary' from all buttons and add 'text-primary-emphasis'
+    var normalizedAdminType = adminType.toLowerCase().trim();
+
     $('.filter-btn').removeClass('btn-outline-primary').addClass('text-primary-emphasis');
 
-    // Add 'text-primary' to the active button and remove 'text-primary-emphasis'
     $('.filter-btn').each(function() {
-        if ($(this).text().toLowerCase().includes(adminType.toLowerCase())) {
+        var buttonText = $(this).text().toLowerCase().trim();
+        if (buttonText.includes(normalizedAdminType)) {
             $(this).removeClass('text-primary-emphasis').addClass('btn-outline-primary');
         }
     });
 }
-
 var currentStatus = 'all';
 function userfilter(adminType, page = 1) {
     currentStatus = adminType;

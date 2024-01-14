@@ -1,3 +1,7 @@
+<?php 
+include '../api/session.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +10,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-light">
     <?php include "../components/sidebar.php";?>
 </body>
 </html>

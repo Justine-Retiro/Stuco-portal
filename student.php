@@ -22,7 +22,7 @@ if (isset($_SESSION['toastr'])) {
         <h1>Student Account<br>Log In</h1>
     </header>
 
-    <div class="Container"> 
+    <div class="Container my-5"> 
         <form id="loginForm" method="post" action="globalapi/student.php">
             <div class="form-content">
                 <input class="form-control" type="text" name="username" placeholder="Username" required>

@@ -7,7 +7,7 @@ function deleteUser($username, $role, $source_table) {
     global $conn; // Use the existing database connection
 
     // The table name is dynamic, so we need to whitelist the possible table names to prevent SQL injection
-    $allowed_tables = ['admin_users', 'council_user', 'users'];
+    $allowed_tables = ['admin_users', 'council_user', 'owner_users','users'];
     if (!in_array($source_table, $allowed_tables)) {
         die("Invalid source table");
     }

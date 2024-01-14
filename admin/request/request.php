@@ -1,52 +1,110 @@
+<?php 
+include '../api/session.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StuCo Requests</title>
-    <link rel="stylesheet" href="requestStyle.css">
-   
+    <title>StuCo Request</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header>
-        <div class="user">
-            <img src="logo.png" alt="Picture">
+<body class>
+  <?php include "../components/sidebar.php";?>
+  <div class="container ms-2 mt-5 fs-4 w-100">
+        <div class="row ">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-12 mb-3">
+                            <h1 class="fs-1">Document Requests</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 p-3 bg-light">
+                            <div class="row rounded-top">
+                                <div class="col-lg-12 ">
+                                    <!-- Whole top bar -->
+                                    <div class="row d-flex justify-content-between ">
+                                        <div class="col-lg-12 pb-3 w-100 bg-light d-flex justify-content-between align-items-center ">
+                                            <div class="col-lg-3  d-flex justify-content-end" id="search-top-bar">
+                                                <div class="input-group" >
+                                                    <input class="form-control border rounded" type="text" placeholder="Search" id="search-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Search bar -->
+                                        
+                                        <!-- /Search bar -->
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="request_table" class="table table-striped table-hover">
+                                <thead>
+                                    <!-- <tr>
+                                        <th>Document ID</th>
+                                        <th>From</th>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr> -->
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <?php
+                                            // include 'api/fetchdocument.php';
+                                        ?>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="modal fade" id="logTransaction" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Transaction log</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="pagination" class="pagination pagination-lg">
+                                <!-- Reserved -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    
-        <nav class="navbar">
-            <ul>
-                <li><a href="http://localhost/stuco/AdminLanding/AdminLanding.html">Dashboard</a></li>
-                <li><a href="http://localhost/stuco/AdminLanding/Notifications.php">Notification</a></li>
-                <li><a href="http://localhost/stuco/AdminLanding/DocumentArchives.html">Document Archives</a></li>
-                <li><a href="http://localhost/stuco/AdminLanding/Calendar.html">Calendar of Events</a></li>
-                <li><a href="http://localhost/stuco/Counsil/">Sign Out</a></li>   
-            </ul>
-        </nav>
-    </header> 
-    
-    <div class="form-background">
-        <div class = "form-container">
-            <form action="request.php" method="post">
-                <label for="from">From:</label>
-                <input type="text" id="from" name="from" required><br><br>
-                <label for="type">Type:</label>
-                <input type="text" id="type" name="type" required><br><br>
-                <label for="description">Description:</label>
-                <input type="text" id="description" name="description" required><br><br>
-                <input type="file" id="file" name="file" multiple>
-                <select name="admin_type" id="adminType">
-                    <option value="Branch Manager">Branch Manager</option>
-                    <option value="Adviser">Adviser</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="GSD">GSD</option>
-                    <option value="COO">COO</option>
-                </select>
-                <button type="submit">submit</button>
-            </form>
-         </div>
     </div>
-    
-      
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function() {
+  // Function to fetch and display user data
+  function displayRequest() {
+      $.ajax({
+          url: '/Stuco/admin/request/api/fetchdocument.php', // Replace with the correct URL
+          method: 'GET',
+          dataType: 'html', // Assuming the response is HTML
+          success: function(data) {
+              $('#request_table').html(data); // Assuming you have a container with id 'user-data-container' to display the fetched data
+          },
+          error: function(xhr, status, error) {
+              console.error('Error fetching user data: ' + error);
+          }
+      });
+  }    
+  displayRequest();
+});
+</script>
 </body>
 </html>

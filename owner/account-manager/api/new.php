@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usercheck = "SELECT * FROM (
         SELECT 'admin_users' as source_table, username, admin_type FROM admin_users
         UNION ALL
+        SELECT 'owner_users', username, admin_type FROM owner_users
+        UNION ALL
         SELECT 'council_user', username, admin_type FROM council_user
         UNION ALL
         SELECT 'users', username, admin_type FROM users
@@ -35,7 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // Insert user into the correct table based on role
         if ($user_type == 'admin') {
-            $insertQuery = "INSERT INTO admin_users (username, first_name, last_name, branch, admin_type, default_password, defaultpass_used) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $insertQuery = "INSERT INTO admin_users (username, first_name, last_name, branch, department, admin_type, default_password, defaultpass_used) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        } elseif ($user_type == 'owner') {
+            $insertQuery = "INSERT INTO owner_users (username, admin_type, default_password, defaultpass_used) VALUES (?, ?, ?, ?)";
         } elseif ($user_type == 'council') {
             $insertQuery = "INSERT INTO council_user (username, first_name, last_name, branch, department, admin_type, default_password, defaultpass_used) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         } else {
@@ -46,10 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         if ($user_type == 'admin') {
-            $stmt->bind_param("ssssssi", $username, $first_name, $last_name, $branch ,$admin_type, $hashedPassword, $defaultpass_used);
+            $stmt->bind_param("sssssssi", $username, $first_name, $last_name, $branch, $department, $admin_type, $hashedPassword, $defaultpass_used);
         } elseif ($user_type == 'council') {
             $stmt->bind_param("sssssssi", $username, $first_name, $last_name, $branch, $department, $admin_type, $hashedPassword, $defaultpass_used);
-        } else {
+        } elseif ($user_type== 'owner') {
+            $stmt->bind_param("sssi", $username, $admin_type, $hashedPassword, $defaultpass_used);
+        }else {
             $stmt->bind_param("sssssssi", $username, $first_name, $last_name, $branch, $department ,$admin_type, $hashedPassword, $defaultpass_used);
         }
 

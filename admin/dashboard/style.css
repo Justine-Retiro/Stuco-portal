@@ -16,7 +16,7 @@ html{
 }
 
 body{
-    background: wheat;
+    /* background: wheat; */
     overflow-x: hidden;
     padding-left: 35rem;
 }
@@ -39,29 +39,28 @@ header .user img{
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 1rem;
-    border-color: wheat;
 }
 
-header .navbar{
+header .navibar{
     width: 100%;
 }
 
-header .navbar ul{
+header .navibar ul{
     list-style: none;
     padding: 1rem 3rem;
 }
 
-header .navbar ul li a{
+header .navibar ul li a{
     display: block;
     padding: 1rem;
     margin: 1.5rem 0;
     background: #333;
-    color: #fff;
+    color: white;
     font-size: 2rem;
     border-radius: 5rem;
 }
 
-header .navbar ul li a:hover{
+header .navibar ul li a:hover{
     background: wheat;
 }
 .container{

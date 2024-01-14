@@ -55,15 +55,55 @@
                                 </tbody>
                             </table>
 
-                            <div class="modal fade" id="deleteModal" tabindex="-1">
+                            <div class="modal fade" id="logTransaction" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Delete user</h5>
+                                        <h5 class="modal-title">Transaction log</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Are you want to delete this user?</p>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="bs-stepper">
+                                                        <div class="bs-stepper-header">
+                                                            <div class="step" data-target="#log-1">
+                                                                <button type="button" class="step-trigger">
+                                                                    <span class="bs-stepper-circle">1</span>
+                                                                    <span class="bs-stepper-label">Start</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="line"></div>
+                                                            <div class="step" data-target="#log-2">
+                                                                <button type="button" class="step-trigger">
+                                                                    <span class="bs-stepper-circle">2</span>
+                                                                    <span class="bs-stepper-label">Processing</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="line"></div>
+                                                            <div class="step" data-target="#log-3">
+                                                                <button type="button" class="step-trigger">
+                                                                    <span class="bs-stepper-circle">3</span>
+                                                                    <span class="bs-stepper-label">Completed</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="bs-stepper-content">
+                                                            <div id="log-1" class="content">
+                                                                <p>Transaction started...</p>
+                                                            </div>
+                                                            <div id="log-2" class="content">
+                                                                <p>Transaction is being processed...</p>
+                                                            </div>
+                                                            <div id="log-3" class="content">
+                                                                <p>Transaction completed!</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Close</button>

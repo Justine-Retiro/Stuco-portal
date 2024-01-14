@@ -16,7 +16,7 @@ html{
 }
 
 body{
-    background: wheat;
+    /* background: wheat; */
     overflow-x: hidden;
     padding-left: 35rem;
 }

@@ -10,6 +10,8 @@ if ($status === 'all') {
     $sql = "SELECT COUNT(*) as total FROM (
     SELECT 'admin_users' as source_table, username, admin_type FROM admin_users
     UNION ALL
+    SELECT 'owner', username, admin_type FROM owner_users
+    UNION ALL
     SELECT 'council_user', username, admin_type FROM council_user
     UNION ALL
     SELECT 'users', username, admin_type FROM users
@@ -17,6 +19,8 @@ if ($status === 'all') {
 } else {
     $sql = "SELECT COUNT(*) as total FROM (
         SELECT username, admin_type FROM admin_users WHERE admin_type = ?
+        UNION ALL
+        SELECT username, admin_type FROM owner_users WHERE admin_type = ?
         UNION ALL
         SELECT username, admin_type FROM council_user WHERE admin_type = ?
         UNION ALL
@@ -27,7 +31,7 @@ if ($status === 'all') {
 $stmt = $conn->prepare($sql);
 
 if ($status !== "all") {
-    $stmt->bind_param("sss", $status, $status, $status);
+    $stmt->bind_param("ssss", $status, $status, $status, $status);
 }
 
 $stmt->execute();

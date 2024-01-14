@@ -18,7 +18,9 @@ $result = null;
 
 if ($adminType == "all") {
     $sql = "SELECT * FROM (
-                SELECT 'admin_users' as source_table, username, branch, NULL as department, admin_type FROM admin_users
+                SELECT 'admin_users' as source_table, username, branch, department, admin_type FROM admin_users
+                UNION ALL
+                SELECT 'owner_users' as source_table, username, NULL as branch, NULL as department, admin_type FROM owner_users
                 UNION ALL
                 SELECT 'council_user' as source_table, username, branch, department, admin_type FROM council_user
                 UNION ALL
@@ -28,14 +30,20 @@ if ($adminType == "all") {
     $stmt->bind_param('ii', $offset, $items_per_page);
 } else {
     $sql = "SELECT * FROM (
-                SELECT 'admin_users' as source_table, username, branch, NULL as department, admin_type FROM admin_users WHERE admin_type = ?
+                SELECT 'admin_users' as source_table, username, branch, department, admin_type FROM admin_users WHERE admin_type = ?
+                UNION ALL
+                SELECT 'owner_users' as source_table, username, NULL as branch, NULL as department, admin_type FROM owner_users WHERE admin_type = ?
                 UNION ALL
                 SELECT 'council_user' as source_table, username, branch, department, admin_type FROM council_user WHERE admin_type = ?
                 UNION ALL
                 SELECT 'users' as source_table, username, branch, NULL as department, admin_type FROM users WHERE admin_type = ?
             ) as combined LIMIT ?, ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssii", $adminType, $adminType, $adminType, $offset, $items_per_page);
+    if ($stmt === false) {
+        // Handle error, possibly output $conn->error
+        die("Error preparing statement: " . $conn->error);
+    }
+    $stmt->bind_param("ssssii", $adminType, $adminType, $adminType, $adminType, $offset, $items_per_page);
 }
 $stmt->execute();
 $result = $stmt->get_result();

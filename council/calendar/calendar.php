@@ -1,3 +1,7 @@
+<?php 
+include '../api/session.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +23,7 @@
   
       </script>
 </head>
-<body>
+<body class="bg-light">
     <?php include "../components/sidebar.php";?>
 
      <div id='calendar'></div>
