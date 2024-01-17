@@ -53,20 +53,10 @@
                             </div>
                             <table id="status_table" class="table table-striped table-hover">
                                 <thead>
-                                    <!-- <tr>
-                                        <th>Document ID</th>
-                                        <th>From</th>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr> -->
+                                    <!-- Reserved -->
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <?php
-                                            // include 'api/fetchdocument.php';
-                                        ?>
-                                    </tr>
+                                    <!-- Reserved -->
                                 </tbody>
                             </table>
 
@@ -111,9 +101,13 @@ function displayTransactionLog(documentId) {
         success: function(response) {
             if (response.status === 'success') {
                 $('#modal_body').html(response.html);
-                $('#logTransaction').modal('show'); // Make sure to show the modal if it's not already being shown
+                $('#logTransaction').modal('show');
+            } else if (response.status === 'info') {
+                // Handle the case where the document is on view but has no transaction logs
+                $('#modal_body').html(response.html);
+                $('#logTransaction').modal('show');
             } else {
-                toastr.error(response.message || 'An error occurred');
+                toastr.error(response.message);
             }
         },
         error: function(xhr, status, error) {
@@ -123,26 +117,44 @@ function displayTransactionLog(documentId) {
 }
 
 $(document).ready(function() {
-  // Function to fetch and display user data
-  function displayStatus() {
+
+    $('#search-input').on('keyup', function() {
+        var query = $(this).val();
+        search_bar(query);
+    });
+    
+    function search_bar(query) {
     $.ajax({
-        url: '/Stuco/council/request/api/fetchdocument.php', // Replace with the correct URL
-        method: 'GET',
-        dataType: 'json', // Change this to 'json' as the response is now a JSON object
+        url: '/stuco/council/request/api/searchdocu.php',
+        type: 'GET',
+        data: { query: query },
         success: function(data) {
-            if (data.status === 'success') {
-                $('#status_table').html(data.html); // Use 'data.html' to update the HTML content
-            } else {
-                toastr.error(data.message || 'An error occurred'); // Show error message from response or a default one
-            }
+            $('#status_table').html(data);
         },
         error: function(xhr, status, error) {
-            toastr.error('Error fetching user data: ' + error); // Show the error
+            console.error('An error occurred:', error);
         }
     });
 }
 
-  // Call displayStatus when the document is ready
+  // Function to fetch and display user data
+  function displayStatus() {
+    $.ajax({
+        url: '/Stuco/council/request/api/fetchdocument.php', 
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            if (data.status === 'success') {
+                $('#status_table').html(data.html); 
+            } else {
+                toastr.error(data.message || 'An error occurred'); 
+            }
+        },
+        error: function(xhr, status, error) {
+            toastr.error('Error fetching user data: ' + error); 
+        }
+    });
+}
   displayStatus();
 });
 </script>

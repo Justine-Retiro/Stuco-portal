@@ -72,6 +72,8 @@ $('#edit').click(function() {
 // Delete Button / Deleting an Event
 $('#delete').click(function() {
     var id = $(this).attr('data-id');
+    console.log('Deleting event with ID:', id); // Add this line to debug
+
     if (!!scheds[id]) {
         var _conf = confirm("Are you sure to delete this scheduled event?");
         if (_conf === true) {
@@ -107,7 +109,7 @@ $('#schedule-form').on('submit', function(e) {
     var formData = $(this).serialize(); // Serialize the form data
 
     $.ajax({
-        url: '/stuco/admin/calendar/api/delete_schedule.php', // The PHP script to handle saving
+        url: '/stuco/admin/calendar/api/save_schedule.php', // The PHP script to handle saving
         type: 'POST',
         data: formData,
         dataType: 'json',

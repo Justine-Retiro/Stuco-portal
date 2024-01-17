@@ -14,70 +14,43 @@ if(isset($_SESSION['username'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StuCo Notification</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
-<body>
+<body class="bg-light">
     <?php include "../components/sidebar.php";?>
     
-    <div class="tabl-background">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Notification #</th>
-                    <th scope="col">From</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                <?php
-                // Establish a new database connection
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $dbname = "stucoportal";
+    <div class="container ps-5 ms-2 mt-5">
+        <div class="col-lg-12 d-flex justify-content-between">
+            <h1>Notification</h1>
+        </div>
+        <hr>
 
-                $conn = new mysqli($servername, $username, $password, $dbname);
+        <div class="row">
+            <div class="col-lg-12 fs-4" >
+                <div class="row">
+                    <div class="col-lg-12 d-flex justify-content-between">
+                        <div class="col-lg-12" id="notification-container"></div>
+                            <!-- <div class="col-lg-11 d-flex justify-content-between" id="top" >
 
-                // Check for connection errors
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
+                            </div>
 
-                // Fetch data from the database
-                $sql = "SELECT * FROM notifications WHERE admin_type = '$adminType'";
-                $result = $conn->query($sql);
+                            <div class="col-lg-7" id="desc">
+                            </div> -->
+                        <div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
 
-                // Check for SQL query errors
-                if ($result === false) {
-                    echo "Error executing SQL query: " . $conn->error;
-                    exit;
-                }
-
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<th scope='row'>" . $row["id"] . "</th>";
-                        echo "<td>" . $row["from_field"] . "</td>";
-                        echo "<td>" . $row["type"] . "</td>";
-                        echo "<td>" . $row["description"] . "</td>";
-                        echo "<td>";
-                        echo "<button class='btn btn-success'>Approve</button>";
-                        echo "<button class='btn btn-danger'>Reject</button>";
-                        echo "</td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='6'>No notifications found</td></tr>";
-                }
-
-                $conn->close();
-                ?>
-            </tbody>
-        </table>
     </div>
+    
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="static/getnotif.js"></script>
 </body>
 </html>

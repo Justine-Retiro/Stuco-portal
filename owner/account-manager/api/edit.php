@@ -192,65 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 $stmt->close();
             }
-        case 'student':
-            // Logic for owner, admin, council, student
-            // Assuming the same logic applies to all user types for simplicity
-            $updateFields = array();
-            $params = array();
-            $paramTypes = '';
-
-            if (!empty($first_name)) {
-                $updateFields[] = "first_name = ?";
-                $params[] = $first_name;
-                $paramTypes .= 's';
-            }
-            if (!empty($last_name)) {
-                $updateFields[] = "last_name = ?";
-                $params[] = $last_name;
-                $paramTypes .= 's';
-            }
-            if (!empty($password)) {
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                $updateFields[] = "password = ?";
-                $params[] = $hashedPassword;
-                $paramTypes .= 's';
-            }
-            if (!empty($admin_type)) {
-                $updateFields[] = "admin_type = ?";
-                $params[] = $admin_type;
-                $paramTypes .= 's';
-            }
-            if (!empty($branch)) {
-                $updateFields[] = "branch = ?";
-                $params[] = $branch;
-                $paramTypes .= 's';
-            }
-            if (!empty($department)) {
-                $updateFields[] = "department = ?";
-                $params[] = $department;
-                $paramTypes .= 's';
-            }
-
-            // Assuming 'users' table is used for all user types
-            $sql = "UPDATE users SET " . implode(', ', $updateFields) . " WHERE username = ?";
-            $params[] = $username;
-            $paramTypes .= 's';
-
-            $stmt = $conn->prepare($sql);
-            if ($stmt === false) {
-                $response['status'] = 'fail';
-                $response['message'] = "Error preparing statement: " . $conn->error;
-            } else {
-                $stmt->bind_param($paramTypes, ...$params);
-                if ($stmt->execute()) {
-                    $response['status'] = 'success';
-                    $response['message'] = 'User updated successfully.';
-                } else {
-                    $response['status'] = 'fail';
-                    $response['message'] = "Error executing statement: " . $stmt->error;
-                }
-                $stmt->close();
-            }
+        
             break;
         default:
             $response['status'] = 'fail';

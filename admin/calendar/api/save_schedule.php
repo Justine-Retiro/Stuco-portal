@@ -27,14 +27,30 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     }
 
     if ($stmt->execute()) {
+        
+        // After successfully inserting or updating the calendar event
+        $event_notification_title = "New Event Scheduled";
+        $event_notification_message = "Event: " . $input_data['title'] . " - " . $input_data['description'];
+
+        // Get all user_ids to broadcast the new event
+        $user_ids_result = $conn->query("SELECT id FROM council_user");
+
+        $event_notification_stmt = $conn->prepare("INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)");
+
+        // Loop through all user_ids and insert a notification for each
+        while ($row = $user_ids_result->fetch_assoc()) {
+            $event_user_id = $row['id'];
+            $event_notification_stmt->bind_param("iss", $event_user_id, $event_notification_title, $event_notification_message);
+            $event_notification_stmt->execute();
+        }
+
         $response = ['success' => true, 'message' => 'Schedule Successfully Saved.'];
     } else {
         $response['message'] = 'An Error occurred. Error: ' . htmlspecialchars($stmt->error);
     }
-
+    
     $stmt->close();
 }
 
 $conn->close();
 echo json_encode($response);
-?>

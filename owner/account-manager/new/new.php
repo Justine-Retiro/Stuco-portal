@@ -93,7 +93,6 @@ $default_password = password();
                                 <option value="owner" >Owner</option>    
                                 <option value="admin" >Admin</option>
                                 <option value="council">Council</option>
-                                <option value="student">Student</option>
                             </select>       
                             <input type="hidden" name="user_type" id="hidden_user_type" value="">                     
                         </div>
@@ -143,10 +142,6 @@ $(document).ready(function(){
             $('#department').show().prop('disabled', false);
             $('#branch').show().prop('disabled', true);
             $('#user_type').val('admin').prop('disabled', true); // Set user type to 'student' and disable selection
-        } else if (role === 'Student') {
-            $('#department').show().prop('disabled', false);
-            $('#branch').show().prop('disabled', false);
-            $('#user_type').val('student').prop('disabled', true); // Set user type to 'student' and disable selection
         } else if (role === 'Owner') {
             $('#department').hide().prop('disabled', true);
             $('#branch').show().prop('disabled', false);

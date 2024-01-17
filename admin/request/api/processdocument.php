@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else if ($action == 'reject') { // Change 'rejected' to 'reject'
                     $action_taken = 'Rejected'; // Change 'rejected' to 'Rejected'
                     $on_process = false;
-                    $stmt = $conn->prepare("UPDATE document_transaction SET  final_admin_id = ?, final_adminType, final_response_time = NOW(),
+                    $stmt = $conn->prepare("UPDATE document_transaction SET  final_admin_id = ?, final_adminType = ?, final_response_time = NOW(),
                     final_response_message = ?, adviserStatus = ?, final_status = ?, adviser_feedback = ?, branchmanager_status = NULL, on_process = ? WHERE docu_id = ?");
                     
                     $stmt->bind_param("isssssii",  $admin_id, $final_adminType, $feedback, $action_taken, $action_taken, $feedback, $on_process, $docu_id);
@@ -179,22 +179,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             // $response["message"] = "The query did not execute.";
                         }
                     }
-                    $stmt = $conn->prepare("INSERT INTO admin_responses (docu_id, admin_id, response_message, response_status, response_time) VALUES (?, ?, ?, ?, NOW())");
-                    $stmt->bind_param("ssss", $docu_id, $admin_id, $feedback, $action);
+                    // $stmt = $conn->prepare("INSERT INTO admin_responses (docu_id, admin_id, response_message, response_status, response_time) VALUES (?, ?, ?, ?, NOW())");
+                    // $stmt->bind_param("ssss", $docu_id, $admin_id, $feedback, $action);
                     
-                    if ($stmt->execute()) {
-                        error_log("Affected rows: " . $stmt->affected_rows);
-                        if ($stmt->affected_rows > 0) {
-                            $response["status"] = 'success';
-                            // $response["message"] = "Adviser status updated successfully and affected rows.";
-                        } else {
-                            $response["status"] = 'success';
-                            // $response["message"] = "Adviser status updated successfully but no rows affected.";
-                        }
-                    } else {
-                        $response["status"] = 'error';
-                        // $response["message"] = "The query did not execute.";
-                    }
+                    // if ($stmt->execute()) {
+                    //     error_log("Affected rows: " . $stmt->affected_rows);
+                    //     if ($stmt->affected_rows > 0) {
+                    //         $response["status"] = 'success';
+                    //         // $response["message"] = "Adviser status updated successfully and affected rows.";
+                    //     } else {
+                    //         $response["status"] = 'success';
+                    //         // $response["message"] = "Adviser status updated successfully but no rows affected.";
+                    //     }
+                    // } else {
+                    //     $response["status"] = 'error';
+                    //     // $response["message"] = "The query did not execute.";
+                    // }
                     break;
                 } else {
                     if ($action == 'approve') { // Change 'approved' to 'approve'
@@ -237,22 +237,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             // $response["message"] = "The query did not execute.";
                         }
                     }
-                    $stmt = $conn->prepare("INSERT INTO admin_responses (docu_id, admin_id, response_message, response_status, response_time) VALUES (?, ?, ?, ?, NOW())");
-                    $stmt->bind_param("ssss", $docu_id, $admin_id, $feedback, $action);
+                    // $stmt = $conn->prepare("INSERT INTO admin_responses (docu_id, admin_id, response_message, response_status, response_time) VALUES (?, ?, ?, ?, NOW())");
+                    // $stmt->bind_param("ssss", $docu_id, $admin_id, $feedback, $action);
                     
-                    if ($stmt->execute()) {
-                        error_log("Affected rows: " . $stmt->affected_rows);
-                        if ($stmt->affected_rows > 0) {
-                            $response["status"] = 'success';
-                            // $response["message"] = "Adviser status updated successfully and affected rows.";
-                        } else {
-                            $response["status"] = 'success';
-                            // $response["message"] = "Adviser status updated successfully but no rows affected.";
-                        }
-                    } else {
-                        $response["status"] = 'error';
-                        // $response["message"] = "The query did not execute.";
-                    }
+                    // if ($stmt->execute()) {
+                    //     error_log("Affected rows: " . $stmt->affected_rows);
+                    //     if ($stmt->affected_rows > 0) {
+                    //         $response["status"] = 'success';
+                    //         // $response["message"] = "Adviser status updated successfully and affected rows.";
+                    //     } else {
+                    //         $response["status"] = 'success';
+                    //         // $response["message"] = "Adviser status updated successfully but no rows affected.";
+                    //     }
+                    // } else {
+                    //     $response["status"] = 'error';
+                    //     // $response["message"] = "The query did not execute.";
+                    // }
                 }
                 break;
                
@@ -272,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
                 // Get the necessary values from the fetched row
                 $doc_type = $row["file_type"];
-                $on_process = $row["on_process"];  // Assuming there's a column named on_process in your table
+                $on_process = $row["on_process"];
                 $doc_description = $row["document_description"];
                 $admin_username = $_SESSION["username"];
                 $admin_admin_type = $_SESSION["adminType"];
@@ -286,9 +286,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if ($action == "approve" && $on_process == true) {
                     $prefix_message = "Your document has been approved by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"];
-                } else {
+                    if (!empty($pass_to_admin)) {
+                        $prefix_message .= " and passed to " . $pass_to_admin;
+                    }
+                } elseif ($action == "reject") {
                     $prefix_message = "Your document has been rejected by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"];
+                } elseif (!empty($pass_to_admin)) {
+                    $prefix_message = "Your document has been passed to " . $pass_to_admin . " by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"];
+                } else {
+                    $prefix_message = "An unknown action has been taken on your document by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"];
                 }
+
+                // After successfully inserting into transaction_log
+                $notification_title = "New Document Update";
+                $notification_message = $prefix_message; // Use the prefix_message from the transaction log
+                $user_id = $row["sender_id"];
+
+                $notification_stmt = $conn->prepare("INSERT INTO notifications (user_id, title, message, docu_id) VALUES (?, ?, ?, ?)");
+                $notification_stmt->bind_param("issi", $user_id, $notification_title, $notification_message, $docu_id);
+                $notification_stmt->execute();
+
                 // Prepare and execute the INSERT query for transaction_log
                 $stmt_log = $conn->prepare("INSERT INTO transaction_log (document_id, doc_type, doc_description, admin_id, admin_username, admin_admin_type, admin_feedback, prefix_message, admin_department, created_at) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");

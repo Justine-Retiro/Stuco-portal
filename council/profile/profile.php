@@ -6,7 +6,7 @@
     <title>Profile</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-light">
     <?php include "../components/sidebar.php";?>
 </body>
 </html>

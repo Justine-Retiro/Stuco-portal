@@ -5,7 +5,6 @@
     text-decoration: none;
     outline: none;
     border: none;
-    text-transform: capitalize;
     transition: all .2s linear;
 }
 
@@ -15,7 +14,8 @@ html{
 }
 
 body{
-    background: wheat;
+    font-size: 100%;;
+    /* background: wheat; */
     overflow-x: hidden;
     padding-left: 35rem;
 }
@@ -31,6 +31,7 @@ header{
     justify-content: center;
     flex-flow: column;
     text-align: center;
+    font-size: 62.5%;
 }
 
 header .user img{
@@ -63,16 +64,76 @@ header .navibar ul li a:hover{
     background: wheat;
 }
 
+.form-background {
+    background-color: wheat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+label{
+    color: white;
+}
+
+.form-container {
+    background-color: #1c3360;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+/* button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+} */
+
+
+#toast-container > .toast {
+    background-image: none !important;
+    background-color: #333 !important; /* Set your desired color */
+    color: white !important;
+    opacity: 1 !important; /* Make sure it's fully opaque */
+}
+
+#toast-container > .toast-success {
+    background-color: #51a351 !important;
+}
+
+#toast-container > .toast-error {
+    background-color: #bd362f !important;
+}
+
+#toast-container > .toast-info {
+    background-color: #2f96b4 !important;
+}
+
+#toast-container > .toast-warning {
+    background-color: #f89406 !important;
+}
 
 
 
-
-
-
-
-
-
-
+#toast-container {
+    z-index: 9999 !important; /* High z-index to ensure it's on top */
+}
 
 
 
@@ -84,7 +145,7 @@ header .navibar ul li a:hover{
 
 
 @media (max-width: 1200px) {
-    html {
-        font-size: 45%;
-    }
-}
+    /* html {
+        font-size: 15px;
+    } */
+}   

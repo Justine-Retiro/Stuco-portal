@@ -77,7 +77,6 @@ $default_password = password();
                                 <option value="Adviser">Adviser</option>
                                 <option value="Owner">Owner</option>
                                 <option value="Student Council">Student Head Council</option>
-                                <option value="Student">Student</option>
                             </select>                            
                         </div>
 
@@ -87,7 +86,6 @@ $default_password = password();
                                 <option value="owner">Owner</option>    
                                 <option value="admin">Admin</option>
                                 <option value="council">Council</option>
-                                <option value="student">Student</option>
                             </select>                            
                         </div>
                         

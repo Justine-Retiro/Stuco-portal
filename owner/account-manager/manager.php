@@ -56,9 +56,6 @@ if (isset($_SESSION['toastr'])) {
                                                         <button class="btn text-primary-emphasis fs-4 fw-medium filter-btn" onclick="userfilter('student council')">Student Council</button>
                                                     </div>
                                                     <div class="col-md-3 pe-2 w-auto" >
-                                                        <button class="btn text-primary-emphasis fs-4 fw-medium filter-btn" onclick="userfilter('student')">Student </button>
-                                                    </div>
-                                                    <div class="col-md-3 pe-2 w-auto" >
                                                         <button class="btn text-primary-emphasis fs-4 fw-medium filter-btn" onclick="userfilter('owner')">Owner </button>
                                                     </div>
                                                 </div>

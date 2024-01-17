@@ -30,13 +30,13 @@
             <button onclick="StudentCouncil()">Student Council</button>
         </div>
 
-        <div class="button-group">
+        <!-- <div class="button-group">
             <button onclick="Student()">Student</button>
-        </div>
+        </div> -->
 
-        <div class="button-group">
+        <!-- <div class="button-group">
             <button onclick="SignUp()">Sign Up</button>
-        </div>
+        </div> -->
     </div>
 
     <script type="text/javascript">
@@ -52,12 +52,12 @@
         function StudentCouncil() {
             window.location.href = "council.php";
         }
-        function Student() {
-            window.location.href = "student.php";
-        }
-        function SignUp() {
-            window.location.href = "signup.php";
-        }
+        // function Student() {
+        //     window.location.href = "student.php";
+        // }
+        // function SignUp() {
+        //     window.location.href = "signup.php";
+        // }
     </script>
 </body>
 </html>
