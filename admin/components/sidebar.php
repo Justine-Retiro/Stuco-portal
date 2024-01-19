@@ -11,8 +11,8 @@
             <li><a class="text-decoration-none" href="../notification/notifications.php">Notification</a></li>
             <li><a class="text-decoration-none" href="../archive/archives.php">Document Archives</a></li>
             <li><a class="text-decoration-none" href="../calendar/calendar.php">Calendar of Events</a></li>
-            <li><a class="text-decoration-none" href="../profile/profile.php">Profile</a></li>
-            <li><a class="text-decoration-none" href="../../globalapi/logout.php">Sign Out</a></li>     
+            <!-- <li><a class="text-decoration-none" href="../profile/profile.php">Profile</a></li> -->
+            <li><a class="text-decoration-none" href="../../stuco/globalapi/logout.php">Sign Out</a></li>     
         </ul>
     </nav>
 </header>

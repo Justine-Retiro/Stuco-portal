@@ -1,5 +1,4 @@
 $(document).ready(function(){
-   
     $('#show_password').change(function() {
         if($(this).is(":checked")) {
             $('#password').attr('type', 'text');
@@ -7,6 +6,8 @@ $(document).ready(function(){
             $('#password').attr('type', 'password');
         }
     });
+
+    
 
     $('form').on('submit', function(event) {
         event.preventDefault();

@@ -1,4 +1,10 @@
 <?php 
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // user is not logged in, redirect them to the login page
+    header('Location: login.php');
+    exit;
+}
 require_once($_SERVER['DOCUMENT_ROOT'] . '/Stuco/connection/connection.php');
 
 ?>

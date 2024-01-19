@@ -1,3 +1,12 @@
+<?php 
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // user is not logged in, redirect them to the login page
+    header('Location: ../../index.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,45 +23,13 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12 mb-3">
-                            <h1 class="fs-1">Document Archive</h1>
+                            <h1 class="fs-1">Document notification</h1>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12 p-3 bg-light">
-                            <div class="row rounded-top">
-                                <div class="col-lg-12 ">
-                                    <!-- Whole top bar -->
-                                    <div class="row d-flex justify-content-between ">
-                                        <div class="col-lg-12 pb-3 w-100 bg-light d-flex justify-content-between align-items-center ">
-                                            <div class="col-lg-3  d-flex justify-content-end" id="search-top-bar">
-                                                <div class="input-group" >
-                                                    <input class="form-control border rounded" type="text" placeholder="Search" id="search-input">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Search bar -->
-                                        
-                                        <!-- /Search bar -->
-                                    </div>
-                                </div>
-                            </div>
                             <table id="archive_table" class="table table-striped table-hover">
-                                <thead>
-                                    <!-- <tr>
-                                        <th>Document ID</th>
-                                        <th>From</th>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                    </tr> -->
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <?php
-                                            // include 'api/fetchdocument.php';
-                                        ?>
-                                    </tr>
-                                </tbody>
+                                <!-- Reserved -->
                             </table>
 
                             <div class="modal fade" id="logTransaction" tabindex="-1">
@@ -129,7 +106,7 @@ $(document).ready(function() {
   // Function to fetch and display user data
   function displayArchive() {
       $.ajax({
-          url: '/Stuco/owner/archive/api/fetchdocument.php', // Replace with the correct URL
+          url: '/Stuco/owner/notification/api/fetchdocument.php', // Replace with the correct URL
           method: 'GET',
           dataType: 'html', // Assuming the response is HTML
           success: function(data) {

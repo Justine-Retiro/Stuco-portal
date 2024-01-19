@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['on_process'])) {
             $final_destination = $_POST["on_process"];
         } else {
-            $final_destination = false; // or some default value
+            $final_destination = 'No'; // or some default value
         }
         $pass_to_admin = $_POST["pass_admin"];
         $username_admin = $_SESSION["username"];
@@ -28,13 +28,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $admin_id = $result["id"];
         $admin_adminType = $_SESSION["adminType"];
 
-        switch($_SESSION["adminType"]){
-            case "Adviser":
+        if ($admin_adminType == 'Adviser'){
+            if ($action == 'approve') { // Change 'approved' to 'approve'
+                $action_taken = 'Approved'; // Change 'approved' to 'Approved'
+                $on_process = true;
+                
+                $stmt = $conn->prepare("UPDATE document_transaction SET adviserStatus = ?, adviser_feedback = ?, pass_to_admin_type = ?, on_process = ? WHERE docu_id = ?");
+                $stmt->bind_param("sssii", $action_taken, $feedback, $pass_to_admin, $on_process, $docu_id);
+        
+                if ($stmt->execute()) {
+                    error_log("Affected rows: " . $stmt->affected_rows);
+                    if ($stmt->affected_rows > 0) {
+                        $response["status"] = 'success';
+                        // $response["message"] = "Adviser status updated successfully and affected rows.";
+                    } else {
+                        $response["status"] = 'success';
+                        // $response["message"] = "Adviser status updated successfully but no rows affected.";
+                    }
+                } else {
+                    $response["status"] = 'error';
+                    // $response["message"] = "The query did not execute.";
+                }
+            } else if ($action == 'reject') { // Change 'rejected' to 'reject'
+                $action_taken = 'Rejected'; // Change 'rejected' to 'Rejected'
+                $on_process = false;
+                $stmt = $conn->prepare("UPDATE document_transaction SET adviserStatus = ?, adviser_feedback = ?, final_admin_id = ?, final_adminType, final_response_time = NOW() , final_status = ?, final_response_message = ?, on_process = ? WHERE docu_id = ?");
+                $stmt->bind_param("sssssii", $action_taken, $feedback, $admin_id, $final_adminType, $action_taken, $feedback, $on_process, $docu_id);
+        
+                if ($stmt->execute()) {
+                    error_log("Affected rows: " . $stmt->affected_rows);
+                    if ($stmt->affected_rows > 0) {
+                        $response["status"] = 'success';
+                        // $response["message"] = "Adviser status updated successfully and affected rows.";
+                    } else {
+                        $response["status"] = 'success';
+                        // $response["message"] = "Adviser status updated successfully but no rows affected.";
+                    }
+                } else {
+                    $response["status"] = 'error';
+                    // $response["message"] = "The query did not execute.";
+                }
+            }
+        } else{
+            if ($final_destination === "Yes") {
                 if ($action == 'approve') { // Change 'approved' to 'approve'
                     $action_taken = 'Approved'; // Change 'approved' to 'Approved'
                     $on_process = true;
-                    $stmt = $conn->prepare("UPDATE document_transaction SET adviserStatus = ?, adviser_feedback = ?, on_process = ? WHERE docu_id = ?");
-                    $stmt->bind_param("ssii", $action_taken, $feedback, $on_process, $docu_id);
+                    
+                    $stmt = $conn->prepare("UPDATE document_transaction SET final_admin_id = ?, final_adminType = ?, final_response_time = NOW() , final_status = ?, final_response_message = ?, on_process = ? WHERE docu_id = ?");
+                    $stmt->bind_param("ssssii", $admin_id, $final_adminType, $action_taken, $feedback, $on_process, $docu_id);
             
                     if ($stmt->execute()) {
                         error_log("Affected rows: " . $stmt->affected_rows);
@@ -47,219 +89,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     } else {
                         $response["status"] = 'error';
-                        $response["message"] = "The query did not execute.";
+                        // $response["message"] = "The query did not execute.";
                     }
                 } else if ($action == 'reject') { // Change 'rejected' to 'reject'
                     $action_taken = 'Rejected'; // Change 'rejected' to 'Rejected'
                     $on_process = false;
-                    $stmt = $conn->prepare("UPDATE document_transaction SET  final_admin_id = ?, final_adminType = ?, final_response_time = NOW(),
-                    final_response_message = ?, adviserStatus = ?, final_status = ?, adviser_feedback = ?, branchmanager_status = NULL, on_process = ? WHERE docu_id = ?");
-                    
-                    $stmt->bind_param("isssssii",  $admin_id, $final_adminType, $feedback, $action_taken, $action_taken, $feedback, $on_process, $docu_id);
-
+                    $stmt = $conn->prepare("UPDATE document_transaction SET final_admin_id = ?, final_adminType = ?, final_response_time = NOW() , final_status = ?, final_response_message = ?, on_process = ? WHERE docu_id = ?");
+                    $stmt->bind_param("ssssii", $admin_id, $final_adminType, $action_taken, $feedback, $on_process, $docu_id);
+            
                     if ($stmt->execute()) {
                         error_log("Affected rows: " . $stmt->affected_rows);
                         if ($stmt->affected_rows > 0) {
                             $response["status"] = 'success';
                             // $response["message"] = "Adviser status updated successfully and affected rows.";
                         } else {
-                            $response["status"] = 'fail';
+                            $response["status"] = 'success';
                             // $response["message"] = "Adviser status updated successfully but no rows affected.";
                         }
                     } else {
                         $response["status"] = 'error';
-                        $response["message"] = "The query did not execute.";
+                        // $response["message"] = "The query did not execute.";
                     }
                 }
-                break;
-            case "Branch Manager":
+            } elseif ($final_destination === "No") {
                 if ($action == 'approve') { // Change 'approved' to 'approve'
-                    $action = 'Approved'; // Change 'approved' to 'Approved'
+                    $action_taken = 'Approved'; // Change 'approved' to 'Approved'
                     $on_process = true;
                     
-                    $sql = "UPDATE document_transaction SET branchmanager_status = ?, on_process = ?, pass_to_admin_type = ?, branchManager_feedback = ? OR NULL WHERE docu_id = ?";
-                    error_log("SQL query: " . $sql);
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("sssss", $action, $on_process, $pass_to_admin, $feedback, $docu_id);
+                    $stmt = $conn->prepare("UPDATE document_transaction SET on_process = ?, pass_to_admin_type = ?, WHERE docu_id = ?");
+                    $stmt->bind_param("sss", $on_process, $pass_to_admin, $docu_id);
             
                     if ($stmt->execute()) {
                         error_log("Affected rows: " . $stmt->affected_rows);
-
                         if ($stmt->affected_rows > 0) {
                             $response["status"] = 'success';
-                            error_log("SQL Error: " . $stmt->error);
-
-                            $response["message"] = "Branch manager status updated successfully and affected rows.";
+                            // $response["message"] = "Adviser status updated successfully and affected rows.";
                         } else {
                             $response["status"] = 'success';
-                            error_log("SQL Error: " . $stmt->error);
-
-                            $response["message"] = "Branch manager updated successfully but no rows affected.";
+                            // $response["message"] = "Adviser status updated successfully but no rows affected.";
                         }
                     } else {
                         $response["status"] = 'error';
-                        error_log("SQL Error: " . $stmt->error);
-
-                        $response["message"] = "The query did not execute.";
+                        // $response["message"] = "The query did not execute.";
                     }
                 } else if ($action == 'reject') { // Change 'rejected' to 'reject'
-                    $action = 'Rejected'; // Change 'rejected' to 'Rejected'
+                    $action_taken = 'Rejected'; // Change 'rejected' to 'Rejected'
                     $on_process = false;
-        
-                    $stmt = $conn->prepare("UPDATE document_transaction SET final_admin_id = ?, final_adminType = ?, final_response_time = NOW(),
-                    final_response_message = ?, final_status = ?, branchmanager_status = ?, on_process = ? WHERE docu_id = ?");
-                    $stmt->bind_param("issssii", $admin_id, $admin_adminType, $feedback, $action, $action, $on_process, $docu_id);
+                    $stmt = $conn->prepare("UPDATE document_transaction SET final_admin_id = ?, final_adminType, final_response_time = NOW() , final_status = ?, final_response_message = ?, on_process = ? WHERE docu_id = ?");
+                    $stmt->bind_param("sssii", $admin_id, $final_adminType, $action_taken, $feedback, $on_process, $docu_id);
             
                     if ($stmt->execute()) {
                         error_log("Affected rows: " . $stmt->affected_rows);
                         if ($stmt->affected_rows > 0) {
                             $response["status"] = 'success';
-                            error_log("SQL Error: " . $stmt->error);
-
-                            $response["message"] = "Branch Manager status updated successfully and affected rows.";
+                            // $response["message"] = "Adviser status updated successfully and affected rows.";
                         } else {
                             $response["status"] = 'success';
-                            error_log("SQL Error: " . $stmt->error);
-                            $response["message"] = "Branch Manager status updated successfully but no rows affected.";
+                            // $response["message"] = "Adviser status updated successfully but no rows affected.";
                         }
                     } else {
-                        error_log("SQL Error: " . $stmt->error);
-
                         $response["status"] = 'error';
-                        $response["message"] = "The query did not execute.";
+                        // $response["message"] = "The query did not execute.";
                     }
                 }
-                break;
-            case "COO":
-            case "CSDL Director":
-            case "Finance":
-            case "GSD":
-            case "Marketing":
-                if ($final_destination == "Yes") {
-                    if ($action == 'approve') { // Change 'approved' to 'approve'
-                        $action_taken = 'Approved'; // Change 'approved' to 'Approved'
-                        $on_process = true;
-                       
-                        $stmt = $conn->prepare("UPDATE document_transaction SET final_admin_id = ?, final_adminType, final_response_time = NOW() , final_status = ?, final_response_message = ?, on_process = ? WHERE docu_id = ?");
-                        $stmt->bind_param("sssii", $admin_id, $final_adminType, $action_taken, $feedback, $on_process, $docu_id);
-                
-                        if ($stmt->execute()) {
-                            error_log("Affected rows: " . $stmt->affected_rows);
-                            if ($stmt->affected_rows > 0) {
-
-
-
-                                $response["status"] = 'success';
-                                // $response["message"] = "Adviser status updated successfully and affected rows.";
-                            } else {
-                                $response["status"] = 'success';
-                                // $response["message"] = "Adviser status updated successfully but no rows affected.";
-                            }
-                        } else {
-                            $response["status"] = 'error';
-                            // $response["message"] = "The query did not execute.";
-                        }
-                    } else if ($action == 'reject') { // Change 'rejected' to 'reject'
-                        $action_taken = 'Rejected'; // Change 'rejected' to 'Rejected'
-                        $on_process = false;
-                        $stmt = $conn->prepare("UPDATE document_transaction SET final_admin_id = ?, final_adminType, final_response_time = NOW() , final_status = ?, final_response_message = ?, on_process = ? WHERE docu_id = ?");
-                        $stmt->bind_param("sssii", $admin_id, $final_adminType, $action_taken, $feedback, $on_process, $docu_id);
-                
-                        if ($stmt->execute()) {
-                            error_log("Affected rows: " . $stmt->affected_rows);
-                            if ($stmt->affected_rows > 0) {
-                                $response["status"] = 'success';
-                                // $response["message"] = "Adviser status updated successfully and affected rows.";
-                            } else {
-                                $response["status"] = 'success';
-                                // $response["message"] = "Adviser status updated successfully but no rows affected.";
-                            }
-                        } else {
-                            $response["status"] = 'error';
-                            // $response["message"] = "The query did not execute.";
-                        }
-                    }
-                    // $stmt = $conn->prepare("INSERT INTO admin_responses (docu_id, admin_id, response_message, response_status, response_time) VALUES (?, ?, ?, ?, NOW())");
-                    // $stmt->bind_param("ssss", $docu_id, $admin_id, $feedback, $action);
-                    
-                    // if ($stmt->execute()) {
-                    //     error_log("Affected rows: " . $stmt->affected_rows);
-                    //     if ($stmt->affected_rows > 0) {
-                    //         $response["status"] = 'success';
-                    //         // $response["message"] = "Adviser status updated successfully and affected rows.";
-                    //     } else {
-                    //         $response["status"] = 'success';
-                    //         // $response["message"] = "Adviser status updated successfully but no rows affected.";
-                    //     }
-                    // } else {
-                    //     $response["status"] = 'error';
-                    //     // $response["message"] = "The query did not execute.";
-                    // }
-                    break;
-                } else {
-                    if ($action == 'approve') { // Change 'approved' to 'approve'
-                        $action_taken = 'Approved'; // Change 'approved' to 'Approved'
-                        $on_process = true;
-                       
-                        $stmt = $conn->prepare("UPDATE document_transaction SET on_process = ?, pass_to_admin_type = ?, WHERE docu_id = ?");
-                        $stmt->bind_param("sss", $on_process, $pass_to_admin, $docu_id);
-                
-                        if ($stmt->execute()) {
-                            error_log("Affected rows: " . $stmt->affected_rows);
-                            if ($stmt->affected_rows > 0) {
-                                $response["status"] = 'success';
-                                // $response["message"] = "Adviser status updated successfully and affected rows.";
-                            } else {
-                                $response["status"] = 'success';
-                                // $response["message"] = "Adviser status updated successfully but no rows affected.";
-                            }
-                        } else {
-                            $response["status"] = 'error';
-                            // $response["message"] = "The query did not execute.";
-                        }
-                    } else if ($action == 'reject') { // Change 'rejected' to 'reject'
-                        $action_taken = 'Rejected'; // Change 'rejected' to 'Rejected'
-                        $on_process = false;
-                        $stmt = $conn->prepare("UPDATE document_transaction SET final_admin_id = ?, final_adminType, final_response_time = NOW() , final_status = ?, final_response_message = ?, on_process = ? WHERE docu_id = ?");
-                        $stmt->bind_param("sssii", $admin_id, $final_adminType, $action_taken, $feedback, $on_process, $docu_id);
-                
-                        if ($stmt->execute()) {
-                            error_log("Affected rows: " . $stmt->affected_rows);
-                            if ($stmt->affected_rows > 0) {
-                                $response["status"] = 'success';
-                                // $response["message"] = "Adviser status updated successfully and affected rows.";
-                            } else {
-                                $response["status"] = 'success';
-                                // $response["message"] = "Adviser status updated successfully but no rows affected.";
-                            }
-                        } else {
-                            $response["status"] = 'error';
-                            // $response["message"] = "The query did not execute.";
-                        }
-                    }
-                    // $stmt = $conn->prepare("INSERT INTO admin_responses (docu_id, admin_id, response_message, response_status, response_time) VALUES (?, ?, ?, ?, NOW())");
-                    // $stmt->bind_param("ssss", $docu_id, $admin_id, $feedback, $action);
-                    
-                    // if ($stmt->execute()) {
-                    //     error_log("Affected rows: " . $stmt->affected_rows);
-                    //     if ($stmt->affected_rows > 0) {
-                    //         $response["status"] = 'success';
-                    //         // $response["message"] = "Adviser status updated successfully and affected rows.";
-                    //     } else {
-                    //         $response["status"] = 'success';
-                    //         // $response["message"] = "Adviser status updated successfully but no rows affected.";
-                    //     }
-                    // } else {
-                    //     $response["status"] = 'error';
-                    //     // $response["message"] = "The query did not execute.";
-                    // }
-                }
-                break;
-               
-            default: 
-                break;
+            }
         }
-
         $sql = $conn->prepare("SELECT * FROM document_transaction WHERE docu_id = ?");
         $sql->bind_param("s", $docu_id);
         
@@ -277,6 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $admin_username = $_SESSION["username"];
                 $admin_admin_type = $_SESSION["adminType"];
                 $admin_department = $_SESSION["department"];
+                $admin_branch = $_SESSION["branch"];
+
                 
                 $adminQuery = $conn->prepare("SELECT first_name, last_name, admin_type FROM admin_users WHERE username = ?");
                 $adminQuery->bind_param("s", $admin_username);
@@ -284,17 +180,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $result = $adminQuery->get_result(); // Now you can get the result
                 $adminRow = $result->fetch_assoc(); // Fetch the data into an associative array
 
+
+                
                 if ($action == "approve" && $on_process == true) {
-                    $prefix_message = "Your document has been approved by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"];
+                    $prefix_message = "Your document has been approved by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"] . ", " . $adminRow["branch"];
                     if (!empty($pass_to_admin)) {
                         $prefix_message .= " and passed to " . $pass_to_admin;
                     }
                 } elseif ($action == "reject") {
-                    $prefix_message = "Your document has been rejected by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"];
+                    $prefix_message = "Your document has been rejected by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"] . ", " . $adminRow["branch"];
                 } elseif (!empty($pass_to_admin)) {
-                    $prefix_message = "Your document has been passed to " . $pass_to_admin . " by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"];
+                    $prefix_message = "Your document has been passed to " . $pass_to_admin . " by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"] . ", " . $adminRow["branch"];
                 } else {
-                    $prefix_message = "An unknown action has been taken on your document by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"];
+                    $prefix_message = "An unknown action has been taken on your document by " . $adminRow["first_name"] . " " . $adminRow["last_name"] . ", " . $adminRow["admin_type"] . ", " . $adminRow["branch"];
                 }
 
                 // After successfully inserting into transaction_log
@@ -329,7 +227,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response["log_status"] = 'log_error';
             $response["log_message"] = "Failed to execute the SELECT query.";
         }
-
     } else {
         $response["status"] = 'error'; // Define an error message for missing parameters
         $response["message"] = 'Missing required parameters.';
@@ -341,4 +238,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 echo json_encode($response);
 exit();
-?>

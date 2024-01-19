@@ -11,7 +11,7 @@ $(document).ready(function(){
     $('form').on('submit', function(event) {
         event.preventDefault();
         $.ajax({
-            url: 'globalapi/owner-login.php',
+            url: '/stuco/globalapi/owner-login.php',
             type: 'POST',
             data: $(this).serialize(),
             success: function(response) {

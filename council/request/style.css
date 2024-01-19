@@ -135,15 +135,6 @@ button[type="submit"]:hover {
     z-index: 9999 !important; /* High z-index to ensure it's on top */
 }
 
-
-
-
-
-
-
-
-
-
 @media (max-width: 1200px) {
     /* html {
         font-size: 15px;

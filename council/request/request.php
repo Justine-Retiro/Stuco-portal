@@ -74,11 +74,15 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/Stuco/connection/connection.php');
                                 <div class="col-lg-6">
                                     <label class="form-label fs-4 text-dark">Recipient Department</label>
                                     <select class="form-select form-select-lg" id="department" name="recipient_department">
-                                        <option value="CMA">CMA</option>
-                                        <option value="COE">COE</option>
-                                        <option value="CIT">CIT</option>
-                                        <option value="CAHS">CAHS</option>
-                                        <option value="CCJE">CCJE</option>
+                                        <option value="CASSC">CASSC</option>
+                                        <option value="CELASC">CELASC</option>
+                                        <option value="CMASC">CMASC</option>
+                                        <option value="CAHSSC">CAHSSC</option>
+                                        <option value="CITESC">CITESC</option>
+                                        <option value="CCJESC">CCJESC</option>
+                                        <option value="CENTRALSC">CENTRALSC</option>
+                                        <option value="SOUTHSC">SOUTHSC</option>
+                                        <option value="SANJOSESC">SANJOSESC</option>
                                     </select>  
                                 </div>
                             </div>
@@ -109,8 +113,35 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/Stuco/connection/connection.php');
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-<script src="static/validation.js"></script>
+<!-- <script src="./static/validation.js"></script> -->
 <script>
+$(document).ready(function(){
+    $('#requestForm').on('submit', function(event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        url: '/stuco/council/request/api/request.php',
+        type: 'POST',
+        data: formData, // Corrected line
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log(response);
+            var data = JSON.parse(response);
+            if (data.status === 'success') {
+                toastr.success(data.message);
+            } else if (data.status === 'fail') {
+                $('#errorAlert').text(data.message).show();
+            }
+        },
+        error: function(xhr, status, error) {
+            if (xhr.status === 401) {
+                toastr.error(xhr.responseText);
+            }
+        }
+    });
+});
+});
 </script>
 </body>
 </html>

@@ -9,22 +9,22 @@ $(document).ready(function(){
     });
 
     // Debug purposes
-    $.ajax({
-        url: 'globalapi/get_session_data.php',
-        type: 'GET',
-        success: function(response) {
-            if (response) {
-                var data = response;
-                // var data = JSON.parse(response);
-                console.log('Session Data:', data);
-            } else {
-                console.log('Session Data is empty.');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching session data:', xhr.responseText);
-        }
-    });
+    // $.ajax({
+    //     url: 'globalapi/get_session_data.php',
+    //     type: 'GET',
+    //     success: function(response) {
+    //         if (response) {
+    //             var data = response;
+    //             // var data = JSON.parse(response);
+    //             console.log('Session Data:', data);
+    //         } else {
+    //             console.log('Session Data is empty.');
+    //         }
+    //     },
+    //     error: function(xhr, status, error) {
+    //         console.error('Error fetching session data:', xhr.responseText);
+    //     }
+    // });
 
     var passwordRegex = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
@@ -59,27 +59,27 @@ $(document).ready(function(){
                 // var data = response;
                 var data = JSON.parse(response);
                 if (data.status === 'success') {
-                    console.log(data);
+                    
                     switch(data.role){
                         case "owner":
                             sessionStorage.setItem('toastr', data.message);
-                            window.location.href = '/owner.php';
+                            window.location.href = '/stuco/owner.php';
                             break;
                         case "admin":
                                 sessionStorage.setItem('toastr', data.message);
-                                window.location.href = '/admin.php';
+                                window.location.href = '/stuco/admin.php';
                                 break;
                         case "Student Council":
                             sessionStorage.setItem('toastr', data.message);
-                            window.location.href = '/council.php';
+                            window.location.href = '/stuco/council.php';
                             break;
                         case "student":
                             sessionStorage.setItem('toastr', data.message);
-                            window.location.href = '/student.php';
+                            window.location.href = '/stuco/student.php';
                             break;
                         default:
                             sessionStorage.setItem('toastr', data.message);
-                            window.location.href = '/index.php';
+                            window.location.href = '/stuco/index.php';
                             break;
                     }
                 } else if (data.status === 'fail') {

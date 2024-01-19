@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 $response = array();
 session_start();
 require_once($_SERVER['DOCUMENT_ROOT'] . '/Stuco/connection/connection.php');
@@ -144,13 +140,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sender_details = getSenderDetails($sender_username);
 
 
-    error_log(print_r($recipientDetails, true));
+    // error_log(print_r($recipientDetails, true));
     
     if ($recipientDetails === false) {
         $response["status"] = 'fail';
         $response["message"] = 'Recipient details not found.';
-        echo json_encode($response);
-        exit;
     }
 
     if (isset($_FILES['file_url']) && $_FILES['file_url']['error'] == UPLOAD_ERR_OK) {
@@ -178,8 +172,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($fileUrl === false) {
             $response["status"] = 'fail';
             $response["message"] = "File upload failed.";
-            echo json_encode($response);
-            exit;
         }
 
         // Prepare an insert statement
@@ -189,7 +181,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!$stmt) {
             $response["status"] = 'fail';
             $response["message"] = "Prepare failed: " . $conn->error;
-            echo json_encode($response);
             exit;
         }
 
@@ -200,11 +191,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->execute()) {
             $response["status"] = 'success';
             $response["message"] = 'Successfully Submitted';
-            echo json_encode($response);
         } else {
             $response["status"] = 'fail';
             $response["message"] = "Execute failed: " . $stmt->error;
-            echo json_encode($response);
         }
 
         // Close statement
@@ -217,8 +206,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $response["message"] = 'File not provided.';
         }
-        echo json_encode($response);
-        exit; // Stop script execution after sending the response
     }
 }
 

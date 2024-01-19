@@ -1,9 +1,14 @@
 <?php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+// error_log("Session defaultpass_used: " . $_SESSION["defaultpass_used"]);
+// error_log(print_r($admin_user, true));
 require_once($_SERVER['DOCUMENT_ROOT'] . '/Stuco/connection/connection.php');
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
-    $password = $_POST['password'];
+    $password = trim($_POST['password']);
     $adminType = $_POST['adminType'];
     $table = "owner_users";
 
@@ -15,22 +20,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $owner_user = $result->fetch_assoc();
-        $hashed_password = $owner_user["password"];
-        $hashed_default_password = $owner_user["default_password"];
-        $defaultpass_used = $owner_user["defaultpass_used"];
+        $admin_user = $result->fetch_assoc();
+        error_log(print_r($admin_user, true));
+
+        $hashed_password = $admin_user["password"];
+        $hashed_default_password = $admin_user["default_password"];
+        $defaultpass_used = $admin_user["defaultpass_used"];
 
         // Check if defaultpass_used is 0 or false
-        if (!$defaultpass_used || $defaultpass_used == 0) {
+        if ($defaultpass_used === 0) {
             // Check if the password is the default password
             if (password_verify($password, $hashed_default_password)) {
                 $_SESSION["loggedin"] = true;
-                $_SESSION["id"] = $owner_user["id"];
+                $_SESSION["id"] = $admin_user["id"];
                 $_SESSION["username"] = $username;
                 $_SESSION["table"] = $table;
 
-                $_SESSION["adminType"] = $owner_user["admin_type"];
-                $_SESSION["defaultpass_used"] = 0; 
+                $_SESSION["adminType"] = $admin_user["admin_type"];
+                $_SESSION["defaultpass_used"] = $admin_user["defaultpass_used"]; 
 
                 $token = bin2hex(random_bytes(16));
                 $_SESSION['token'] = $token;
@@ -39,26 +46,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo json_encode($response);
                 exit;
             }
-        } else if (password_verify($password, $hashed_password)) {
+        } else if ($defaultpass_used === 1) {
             // If defaultpass_used is true, check the password
-            $_SESSION["loggedin"] = true;
-            $_SESSION["id"] = $owner_user["id"];
-            $_SESSION["username"] = $username;
-            $_SESSION["table"] = $table;
-
-            $_SESSION["adminType"] = $owner_user["admin_type"];
-            
-
-            $token = bin2hex(random_bytes(16));
-            $_SESSION['token'] = $token;
-
-            // Update the user's token in the database
-            $updateQuery = "UPDATE {$table} SET token = ? WHERE username = ?";
-            $updateStmt = $conn->prepare($updateQuery);
-            $updateStmt->bind_param("ss", $token, $username);
-            $updateStmt->execute();
-
-            $response['status'] = 'success';
+            if (password_verify($password, $hashed_password)) {
+                // Password is correct, set the session variables
+                $_SESSION["loggedin"] = true;
+                $_SESSION["id"] = $admin_user["id"];
+                $_SESSION["username"] = $username;
+                $_SESSION["table"] = $table;
+        
+                $_SESSION["adminType"] = $admin_user["admin_type"];
+        
+                $token = bin2hex(random_bytes(16));
+                $_SESSION['token'] = $token;
+        
+                // Update the user's token in the database
+                $updateQuery = "UPDATE {$table} SET token = ? WHERE username = ?";
+                $updateStmt = $conn->prepare($updateQuery);
+                $updateStmt->bind_param("ss", $token, $username);
+                $updateStmt->execute();
+        
+                $response['status'] = 'success';
+            } else {
+                // Password is not correct
+                $response['status'] = 'fail';
+                $response['message'] = 'Invalid Password.';
+            }
             echo json_encode($response);
             exit;
         } else {

@@ -9,54 +9,41 @@ $offset = ($page - 1) * $items_per_page; // Calculate the offset
 $stmt = null;
 $result = null;
 
-switch ($admin_type) {
-    case "Adviser":
-        $sql = "SELECT dt.*, 
-            cu_sender.first_name as sender_first_name, 
-            cu_sender.last_name as sender_last_name, 
-            au_recipient.first_name as recipient_first_name, 
-            au_recipient.last_name as recipient_last_name,
-            dt.on_process as on_process
-        FROM document_transaction dt 
-        LEFT JOIN council_user cu_sender ON dt.sender_username = cu_sender.username 
-        LEFT JOIN admin_users au_recipient ON dt.recipient_username = au_recipient.username 
-        WHERE au_recipient.admin_type = 'adviser' AND 
-        cu_sender.department = ? AND
-        au_recipient.department = ?  AND dt.on_process = true
-        ORDER BY dt.created_at DESC
-        LIMIT ? OFFSET ?";
+if ($admin_type == 'Adviser'){
+    $sql = "SELECT dt.*, 
+        cu_sender.first_name as sender_first_name, 
+        cu_sender.last_name as sender_last_name, 
+        au_recipient.first_name as recipient_first_name, 
+        au_recipient.last_name as recipient_last_name,
+        dt.on_process as on_process
+    FROM document_transaction dt 
+    LEFT JOIN council_user cu_sender ON dt.sender_username = cu_sender.username 
+    LEFT JOIN admin_users au_recipient ON dt.recipient_username = au_recipient.username 
+    WHERE au_recipient.admin_type = 'adviser' AND 
+    cu_sender.department = ? AND
+    au_recipient.department = ?  AND dt.on_process = true
+    ORDER BY dt.created_at DESC
+    LIMIT ? OFFSET ?";
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssii", $_SESSION["department"], $_SESSION["department"], $items_per_page, $offset);
-        break;
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssii", $_SESSION["department"], $_SESSION["department"], $items_per_page, $offset);
+} else {
+    $sql = "SELECT dt.*, 
+        cu_sender.first_name as sender_first_name, 
+        cu_sender.last_name as sender_last_name, 
+        au_recipient.first_name as recipient_first_name, 
+        au_recipient.last_name as recipient_last_name,
+        dt.on_process as on_process
+    FROM document_transaction dt 
+    LEFT JOIN council_user cu_sender ON dt.sender_username = cu_sender.username 
+    LEFT JOIN admin_users au_recipient ON dt.recipient_username = au_recipient.username 
+    WHERE dt.pass_to_admin_type = ? AND 
+    dt.on_process = true
+    ORDER BY dt.created_at DESC
+    LIMIT ? OFFSET ?";
 
-    case "Branch Manager": 
-    case "CSDL Director": 
-    case "Marketing": 
-    case "Finance": 
-    case "GSD": 
-    case "COO": 
-        $sql = "SELECT dt.*, 
-            cu_sender.first_name as sender_first_name, 
-            cu_sender.last_name as sender_last_name, 
-            au_recipient.first_name as recipient_first_name, 
-            au_recipient.last_name as recipient_last_name,
-            dt.on_process as on_process
-        FROM document_transaction dt 
-        LEFT JOIN council_user cu_sender ON dt.sender_username = cu_sender.username 
-        LEFT JOIN admin_users au_recipient ON dt.recipient_username = au_recipient.username 
-        WHERE dt.pass_to_admin_type = ? AND 
-        dt.on_process = true
-        ORDER BY dt.created_at DESC
-        LIMIT ? OFFSET ?";
-
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssii", $_SESSION["adminType"], $items_per_page, $offset);
-
-    default:
-        $sql = "";
-        echo "This user is not authorized to see the records.";
-        exit();
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sii", $_SESSION["adminType"], $items_per_page, $offset);
 }
 
 if ($sql) {
@@ -74,7 +61,7 @@ echo "<th>Date</th>";
 echo "<th>Type</th>";
 echo "<th>Description</th>";
 echo "<th>Adviser Status</th>";
-echo "<th>Branch Manager Status</th>";
+// echo "<th>Branch Manager Status</th>";
 echo "<th>Final Status</th>";
 echo "<th>Actions</th>";
 // echo "<th></th>";
@@ -96,7 +83,7 @@ if ($result && $result->num_rows > 0) {
         echo "<td>" . htmlspecialchars($row["file_type"]) . "</td>";
         echo "<td>" . htmlspecialchars($row["document_description"]) . "</td>";
         echo "<td>" . htmlspecialchars($row["adviserStatus"]) . "</td>";
-        echo "<td>" . htmlspecialchars($row["branchmanager_status"]) . "</td>";
+        // echo "<td>" . htmlspecialchars($row["branchmanager_status"]) . "</td>";
         echo "<td>" . htmlspecialchars($row["final_status"]) . "</td>";
         echo "<td>";
         if ($row["adviserStatus"] == "Approved" && $row["on_process"]) {

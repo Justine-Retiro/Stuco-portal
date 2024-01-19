@@ -83,7 +83,6 @@ $default_password = password();
                                 <option value="Adviser">Adviser</option>
                                 <option value="Owner">Owner</option>
                                 <option value="Student Council">Student Head Council</option>
-                                <option value="Student">Student</option>
                             </select>                            
                         </div>
 
@@ -110,11 +109,15 @@ $default_password = password();
                             <label class="input-group-text text-dark mb-0" for="department">Department:</label>
                             <select class="form-select" id="department" name="department">
                                 <option value="" selected>Select one</option>
-                                <option value="CMA">CMA</option>
-                                <option value="COE">COE</option>
-                                <option value="CIT">CIT</option>
-                                <option value="CAHS">CAHS</option>
-                                <option value="CCJE">CCJE</option>
+                                <option value="CASSC">CASSC</option>
+                                <option value="CELASC">CELASC</option>
+                                <option value="CMASC">CMASC</option>
+                                <option value="CAHSSC">CAHSSC</option>
+                                <option value="CITESC">CITESC</option>
+                                <option value="CCJESC">CCJESC</option>
+                                <option value="CENTRALSC">CENTRALSC</option>
+                                <option value="SOUTHSC">SOUTHSC</option>
+                                <option value="SANJOSESC">SANJOSESC</option>
                             </select>                            
                         </div> <br>
 
@@ -136,13 +139,37 @@ $(document).ready(function(){
 
         if(role === 'Student Council'){
             $('#department').show().prop('disabled', false);
-            $('#branch').hide().prop('disabled', true);
+            $('#branch').show().prop('disabled', false);
             $('#user_type').val('council').prop('disabled', true); // Set user type to 'council' and disable selection
         } else if (role === 'Adviser') {
             $('#department').show().prop('disabled', false);
             $('#branch').show().prop('disabled', true);
             $('#user_type').val('admin').prop('disabled', true); // Set user type to 'student' and disable selection
         } else if (role === 'Owner') {
+            $('#department').hide().prop('disabled', true);
+            $('#branch').show().prop('disabled', false);
+            $('#user_type').val('owner').prop('disabled', true); 
+        } else {
+            $('#department').hide().val('').prop('disabled', false);
+            $('#branch').show().prop('disabled', false);
+            $('#user_type').val('admin').prop('disabled', true); 
+        }
+
+        $('#hidden_user_type').val($('#user_type').val());
+    });
+
+    $('#branch').change(function(){
+        var branch = $(this).val();
+
+        if(branch === 'South'){
+            $('#department').show().prop('disabled', false);
+            $('#branch').show().prop('disabled', false);
+            $('#user_type').val('council').prop('disabled', true); // Set user type to 'council' and disable selection
+        } else if (role === 'Adviser') {
+            $('#department').show().prop('disabled', false);
+            $('#branch').show().prop('disabled', true);
+            $('#user_type').val('admin').prop('disabled', true); // Set user type to 'student' and disable selection
+        } else if (role === 'Owner') {the
             $('#department').hide().prop('disabled', true);
             $('#branch').show().prop('disabled', false);
             $('#user_type').val('owner').prop('disabled', true); 

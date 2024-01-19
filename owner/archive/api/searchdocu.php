@@ -1,10 +1,11 @@
 <?php 
 session_start();
 require_once($_SERVER['DOCUMENT_ROOT'] . '/Stuco/connection/connection.php');
-
 $page = $_GET['page'] ?? 1; // Get the current page number, default to 1 if not set
 $items_per_page = 5; // Set the number of items to display per page
 $offset = ($page - 1) * $items_per_page; // Calculate the offset
+$searchTerm = $_GET['query'] ?? ''; // Get the search term from the query parameters
+$searchTerm = "%$searchTerm%"; // Prepare the search term for the SQL LIKE clause
 $stmt = null;
 $result = null;
 
@@ -18,64 +19,33 @@ $sql = "SELECT dt.*,
         LEFT JOIN council_user cu_sender ON dt.sender_username = cu_sender.username 
         LEFT JOIN admin_users au_recipient ON dt.recipient_username = au_recipient.username 
         WHERE dt.on_process = false
+        AND (dt.docu_id LIKE ? OR cu_sender.first_name LIKE ? OR cu_sender.last_name LIKE ? OR au_recipient.first_name LIKE ? OR au_recipient.last_name LIKE ? OR dt.adviserStatus LIKE ? OR dt.final_status LIKE ? OR dt.branchmanager_status LIKE ?)
         ORDER BY dt.created_at DESC
-        LIMIT ? OFFSET ?";
-
+        LIMIT ?, ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ii", $items_per_page, $offset);
-
+        $stmt->bind_param("ssssssssii", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $offset, $items_per_page);
 if ($sql) {
     $stmt->execute();
     $result = $stmt->get_result();
 }
 
-function time_elapsed_string($datetime, $full = false) {
-    $now = new DateTime;
-    $ago = new DateTime($datetime);
-    $diff = $now->diff($ago);
-
-    $diff->w = floor($diff->d / 7);
-    $diff->d -= $diff->w * 7;
-
-    $string = array(
-        'y' => 'year',
-        'm' => 'month',
-        'w' => 'week',
-        'd' => 'day',
-        'h' => 'hour',
-        'i' => 'minute',
-        's' => 'second',
-    );
-    foreach ($string as $k => &$v) {
-        if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-        } else {
-            unset($string[$k]);
-        }
-    }
-
-    if (!$full) $string = array_slice($string, 0, 1);
-    return $string ? implode(', ', $string) . ' ago' : 'just now';
-}
-
 echo "<thead>";
 echo "<tr>";
-echo "<th colspan='9'>Latest Requests</th>";
-echo "</tr>";
-echo "<tr>";
-echo "<th>Index</th>";
+echo "<th>Index #</th>";
 echo "<th>Document ID</th>";
 echo "<th>Sender</th>";
 echo "<th>Recipient</th>";
 echo "<th>Date</th>";
 echo "<th>Type</th>";
 echo "<th>Description</th>";
-echo "<th colspan='2'>Actions</th>";
+echo "<th>Adviser Status</th>";
+echo "<th>Branch Manager Status</th>";
+echo "<th>Final Status</th>";
+echo "<th>Actions</th>";
 echo "<th></th>";
 echo "</tr>";
 echo "</thead>";
 echo "<tbody>";
-$date = new DateTime($row["created_at"]);
 
 $count = 1;
 if ($result && $result->num_rows > 0) {
@@ -86,13 +56,13 @@ if ($result && $result->num_rows > 0) {
         echo "<td>" . htmlspecialchars($row["docu_id"]) . "</td>";
         echo "<td>" . htmlspecialchars($row["sender_first_name"]) . " " . htmlspecialchars($row["sender_last_name"]) . "<br>" . htmlspecialchars($row["sender_branch"]) . "<br>" . htmlspecialchars($row["sender_department"]) .  "<br>" . htmlspecialchars($row["sender_adminType"]) ."</td>";
         echo "<td>" . htmlspecialchars($row["recipient_first_name"]) . " " . htmlspecialchars($row["recipient_last_name"]) . "<br>" . htmlspecialchars($row["recipient_branch"]) . "<br>" . htmlspecialchars($row["recipient_department"]) .  "<br>" . htmlspecialchars($row["recipient_adminType"]) ."</td>";
-        echo "<td>" . $date->format('F d Y') . "</td>"; // Formats the date as Mon/d/yyyy
+        echo "<td>" . htmlspecialchars($row["created_at"]) . "</td>";
         echo "<td>" . htmlspecialchars($row["file_type"]) . "</td>";
         echo "<td>" . htmlspecialchars($row["document_description"]) . "</td>";
-        echo "</td>";
-        echo "<td>" . '<button class="btn btn-outline-success me-1 btn-lg downloadFile" onclick="downloadFile(' . $row["docu_id"] . ')" data-document-id="' . $row["docu_id"] . '">Download file</button>' . "</td>";
-        echo "<td>" . time_elapsed_string($row["created_at"]) . "</td>";
-
+        echo "<td>" . htmlspecialchars($row["adviserStatus"]) . "</td>";
+        echo "<td>" . htmlspecialchars($row["branchmanager_status"]) . "</td>";
+        echo "<td>" . htmlspecialchars($row["final_status"]) . "</td>";
+        echo "<td>" . '<button class="btn btn-outline-primary me-1 btn-lg viewTransaction"  data-bs-toggle="modal" data-bs-target="#logTransaction" onclick="displayTransactionLog(' . $row["docu_id"] . ')" data-document-id="' . $row["docu_id"] . '">Details</button>' . "</td>";
         echo "</tr>";
         $count++;
     }

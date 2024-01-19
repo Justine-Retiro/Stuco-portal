@@ -18,7 +18,7 @@ function changePassword($newPassword) {
     $newPassword = mysqli_real_escape_string($conn, $newPassword);
 
     // Hash the new password before storing it
-    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
 
     // Prepare the SQL statement to update the password
     $table = $_SESSION["table"];
@@ -46,18 +46,12 @@ if (!isUserLoggedIn()) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST["password"];
-    if (changePassword($password)) {
+    if (changePassword($password) == true) {
         $response["status"] = "success";
         $response["role"] = $_SESSION["adminType"];
-        echo json_encode($response);
-        exit;
     } else {
         $response["status"] = "fail";
         $response["message"] = "Password change failed";
-        echo json_encode($response);
     }
-    $response["status"] = "fail";
-    $response["message"] = "No change was done";
 }
 echo json_encode($response);
-?>

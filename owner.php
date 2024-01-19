@@ -14,7 +14,7 @@
     </header>
 
     <div class="Container my-5"> 
-        <form id="loginForm" method="post" action="globalapi/owner-login.php">
+        <form id="loginForm" action="globalapi/admin.php"  method="post" >
             <div class="form-content">
                 <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;">
                 <!-- Reserved for error messages -->
@@ -36,5 +36,25 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <script src="global_static/js/owner/validation.js"></script>
+<script>
+    $(document).ready(function() {
+    // Check if there's a toastr message in the cookie
+    var toastrMessage = sessionStorage.getItem('toastr');
+    if (toastrMessage) {
+        toastr.success(toastrMessage);
+        sessionStorage.removeItem('toastr');
+    }
+        function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+    }
+});
+</script>
 </body>
 </html>

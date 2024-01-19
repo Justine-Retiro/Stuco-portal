@@ -70,7 +70,8 @@ if ($result && $result->num_rows > 0) {
         $html .= "<td>" . htmlspecialchars($row["branchmanager_status"]) . "</td>";
         $html .= "<td>" . htmlspecialchars($row["final_status"]) . "</td>";
         $html .= "<td>" . '<button class="btn btn-outline-primary me-1 btn-lg viewTransaction"  data-bs-toggle="modal" data-bs-target="#logTransaction" onclick="displayTransactionLog(' . $row["docu_id"] . ')" data-document-id="' . $row["docu_id"] . '">Details</button>' . "</td>";
-        
+        $html .= "<td>" . '<button class="btn btn-outline-success me-1 btn-lg viewFeedback"  data-bs-toggle="modal" data-bs-target="#feedbackView" onclick="displayFeedback(' . $row["docu_id"] . ')" data-document-id="' . $row["docu_id"] . '">Feedback</button>' . "</td>";
+
         $count++;
     }
     

@@ -53,6 +53,8 @@ $row = $result->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Requests</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -130,7 +132,7 @@ $row = $result->fetch_assoc();
                                 </div>
 
                                 <div class="col-lg-6">
-                                    <label class="form-label fs-4 text-dark">Council Department</label>
+                                    <label class="form-label fs-4 text-dark">Student Council Department</label>
                                     <input type="text" class="form-control form-control fs-4" name="file_type" value="<?php echo $row["sender_department"] ?>" disabled readonly>
                                 </div>
                             </div>
@@ -161,6 +163,7 @@ $row = $result->fetch_assoc();
                                 <div class="col-lg-12 pass_admin">
                                     <label class="form-label fs-4 text-dark" for="pass_admin">Pass to admin</label>
                                     <select class="form-control form-control-lg" name="pass_admin" id="pass_admin">
+                                        <option value="Branch Manager">Branch Manager</option>
                                         <option value="CSDL Director">CSDL Director</option>
                                         <option value="Finance">Finance</option>
                                         <option value="Marketing">Marketing</option>
@@ -207,6 +210,8 @@ $row = $result->fetch_assoc();
     </div>
     
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <!-- <script src="static/validation.js"></script> -->
 <script>
@@ -220,24 +225,20 @@ $(document).ready(function(){
     
     console.log(admin_type);
 
-    if (admin_type === "Adviser") {
-        $('.on_process').hide();
-        $('.pass_admin').hide();
-    } else {
-        $('.on_process').show();
-        $('.pass_admin').show();
+    $('.on_process').show();
+    $('.pass_admin').show();
 
-        $('#on_process').change(function() {
-            var on_process_status = $(this).val();
-            if (on_process_status === "Yes") {
-                $('.pass_admin').hide()
-                $('#pass_admin').hide().val(false).prop('disabled', true);
-            } else {
-                $('.pass_admin').show();
-                $('#pass_admin').show().prop('disabled', false, 'required', true);
-            }
-        }).trigger('change'); // Trigger the change event on page load to set the initial state
-    } 
+    $('#on_process').change(function() {
+        var on_process_status = $(this).val();
+        if (on_process_status === "Yes") {
+            $('.pass_admin').hide()
+            $('#pass_admin').hide().val(false).prop('disabled', true);
+        } else {
+            $('.pass_admin').show();
+            $('#pass_admin').show().prop('disabled', false, 'required', true);
+        }
+    }).trigger('change'); // Trigger the change event on page load to set the initial state
+
 
 
     // Function to process the loan action
@@ -248,12 +249,13 @@ $(document).ready(function(){
         data: { docu_id: docu_id, feedback: feedback, 
             pass_admin: pass_admin, final_destination: final_destination, action: action },
         success: function(response) {    
-            var data = response;   
-            // var data = JSON.parse(response);
+            // var data = response;   
+            var data = JSON.parse(response);
             if (data.status == 'success'){
+                toastr.success(data.message);
                 window.location.href = 'admin/request/request.php';
             } else {
-                console.log(data.message);
+                toastr.error(data.message);
             }
         },
         error: function(xhr, status, error) {

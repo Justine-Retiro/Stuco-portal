@@ -34,7 +34,7 @@ switch ($admin_type) {
         LEFT JOIN admin_users au_recipient ON dt.recipient_username = au_recipient.username 
         WHERE au_recipient.admin_type = 'adviser' AND 
         cu_sender.department = ? AND
-        au_recipient.department = ?  AND dt.on_process = true
+        au_recipient.department = ?  AND dt.on_process = false
         AND (dt.docu_id LIKE ? OR cu_sender.first_name LIKE ? OR cu_sender.last_name LIKE ? OR au_recipient.first_name LIKE ? OR au_recipient.last_name LIKE ? OR dt.adviserStatus LIKE ? OR dt.final_status LIKE ? OR dt.branchmanager_status LIKE ?)
         ORDER BY dt.created_at DESC
         LIMIT ?, ?";
@@ -64,7 +64,6 @@ switch ($admin_type) {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssssssssii", $admin_type, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $offset, $items_per_page);
         break;
-    // Add other cases here...
     default:
         $sql = "";
         echo "This user is not authorized to see the records.";

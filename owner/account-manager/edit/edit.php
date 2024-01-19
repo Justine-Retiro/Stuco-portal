@@ -83,10 +83,11 @@ $default_password = password();
                         <div class="input-group mb-3 input-group-lg">
                             <label class="input-group-text text-dark mb-0" for="user_type">User type:</label>
                             <select class="form-select" id="user_type" name="user_type" readonly>
-                                <option value="owner">Owner</option>    
-                                <option value="admin">Admin</option>
+                                <option value="owner" >Owner</option>    
+                                <option value="admin" >Admin</option>
                                 <option value="council">Council</option>
-                            </select>                            
+                            </select>       
+                            <input type="hidden" name="user_type" id="hidden_user_type" value="">                     
                         </div>
                         
                         <div class="input-group mb-3 input-group-lg" id="branch">
@@ -101,11 +102,16 @@ $default_password = password();
                         <div class="input-group mb-3 input-group-lg" id="department" style="display: none;">
                             <label class="input-group-text text-dark mb-0" for="department">Department:</label>
                             <select class="form-select" id="department" name="department">
-                                <option value="Cma">CMA</option>
-                                <option value="COE">COE</option>
-                                <option value="CIT">CIT</option>
-                                <option value="CAHS">CAHS</option>
-                                <option value="CCJE">CCJE</option>
+                                <option value="" selected>Select one</option>
+                                <option value="CASSC">CASSC</option>
+                                <option value="CELASC">CELASC</option>
+                                <option value="CMASC">CMASC</option>
+                                <option value="CAHSSC">CAHSSC</option>
+                                <option value="CITESC">CITESC</option>
+                                <option value="CCJESC">CCJESC</option>
+                                <option value="CENTRALSC">CENTRALSC</option>
+                                <option value="SOUTHSC">SOUTHSC</option>
+                                <option value="SANJOSESC">SANJOSESC</option>
                             </select>                            
                         </div> <br>
 

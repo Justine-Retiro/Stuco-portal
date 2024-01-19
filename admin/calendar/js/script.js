@@ -28,7 +28,7 @@ calendar = new Calendar(document.getElementById('calendar'), {
         var id = info.event.id
         if (!!scheds[id]) {
             _details.find('#title').text(scheds[id].title)
-            _details.find('#description').text(scheds[id].description)
+            _details.find('#description').text(scheds[id].event_description)
             _details.find('#start').text(scheds[id].sdate)
             _details.find('#end').text(scheds[id].edate)
             _details.find('#edit,#delete').attr('data-id', id)
@@ -59,7 +59,7 @@ $('#edit').click(function() {
         console.log(String(scheds[id].start_datetime), String(scheds[id].start_datetime).replace(" ", "\\t"))
         _form.find('[name="id"]').val(id)
         _form.find('[name="title"]').val(scheds[id].title)
-        _form.find('[name="description"]').val(scheds[id].description)
+        _form.find('[name="description"]').val(scheds[id].event_description)
         _form.find('[name="start_datetime"]').val(String(scheds[id].start_datetime).replace(" ", "T"))
         _form.find('[name="end_datetime"]').val(String(scheds[id].end_datetime).replace(" ", "T"))
         $('#event-details-modal').modal('hide')

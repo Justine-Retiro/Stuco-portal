@@ -77,6 +77,23 @@
                                 </div>
                             </div>
 
+                            <div class="modal fade" id="feedbackView" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Feedback</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="modal_feedback">
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div id="pagination" class="pagination pagination-lg">
                                 <!-- Reserved -->
                             </div>
@@ -91,6 +108,31 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <!-- <script src="static/modal.js"></script> -->
 <script>
+
+function displayFeedback(documentId) {
+    $.ajax({
+        url: '/Stuco/council/request/api/fetchfeedback.php',
+        method: 'GET',
+        data: { document_id: documentId },
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                $('#modal_feedback').html(response.html);
+                $('#feedbackView').modal('show');
+            } else if (response.status === 'info') {
+                // Handle the case where the document is on view but has no transaction logs
+                $('#modal_feedback').html(response.html);
+                $('#feedbackView').modal('show');
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            toastr.error('Error fetching transaction log: ' + error);
+        }
+    });
+}
+
 // Define displayTransactionLog in the global scope
 function displayTransactionLog(documentId) {
     $.ajax({

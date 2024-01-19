@@ -10,7 +10,7 @@
             <li><a class="text-decoration-none" href="../archive/archives.php">Document Archives</a></li>
             <li><a class="text-decoration-none" href="../calendar/calendar.php">Calendar of Events</a></li>
             <li><a class="text-decoration-none" href="../account-manager/manager.php">Account Manager</a></li>
-            <li><a class="text-decoration-none" href="../../../globalapi/logout.php">Sign Out</a></li>
+            <li><a class="text-decoration-none" href="../../../stuco/globalapi/logout.php">Sign Out</a></li>
         </ul>
     </nav>
 </header> 

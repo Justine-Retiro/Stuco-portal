@@ -1,4 +1,11 @@
 <?php 
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // user is not logged in, redirect them to the login page
+    header('Location: ../../index.php');
+    exit;
+}
+
 if (isset($_SESSION['toastr'])) {
     echo '<script>sessionStorage.setItem("toastr", "'.$_SESSION['toastr'].'");</script>';
     unset($_SESSION['toastr']);
@@ -8,7 +15,7 @@ if (isset($_SESSION['toastr'])) {
 <html>
 <head>
     <title>Manager</title>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -76,22 +83,7 @@ if (isset($_SESSION['toastr'])) {
                                 </div>
                             </div>
                             <table id="users_table" class="table table-striped table-hover">
-                                <thead>
-                                    <!-- <tr>
-                                        <th>Index #</th>
-                                        <th scope="col">Username</th>
-                                        <th scope="col">Department</th>
-                                        <th scope="col">Roles</th>
-                                        <th></th>
-                                    </tr> -->
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <?php
-                                            // include 'api/fetchuser.php';
-                                        ?>
-                                    </tr>
-                                </tbody>
+                                <!-- Reserved -->
                             </table>
 
                             <div class="modal fade" id="deleteModal" tabindex="-1">

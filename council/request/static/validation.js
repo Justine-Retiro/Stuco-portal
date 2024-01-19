@@ -3,9 +3,9 @@ $(document).ready(function(){
         event.preventDefault();
         var formData = new FormData(this); // Use FormData instead of serialize
         $.ajax({
-            url: '/stuco/council/request/api/request.php',
+            url: '/Stuco/council/request/api/request.php',
             type: 'POST',
-            data: formData,
+            data: json,
             processData: false, // These two settings are required for file upload with FormData
             contentType: false,
             success: function(response) {

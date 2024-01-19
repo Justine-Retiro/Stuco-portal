@@ -24,7 +24,7 @@ if(!$isValidToken || $_SESSION['adminType'] != 'Student Council' || !isset($_SES
     // If the token is invalid, or the user is not a Student Council member, or there is no username
     // End the session and redirect them
     session_destroy();
-    header("Location: index.php"); // Redirect to login page
+    header("Location: ../../index.php"); // Redirect to login page
     exit();
 }
 
@@ -40,7 +40,7 @@ if(isset($_SESSION['timeout'])) {
     if($session_life > $inactive) {
         // End the session
         session_destroy();
-        header("Location: logout.php"); // Redirect to logout page
+        header("Location: ../../logout.php"); // Redirect to logout page
         exit();
     }
 }
