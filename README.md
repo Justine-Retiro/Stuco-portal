@@ -5,17 +5,11 @@ The StuCo Portal is a real-time approval and organization platform designed to s
 Key Features
 
 ✅ Real-Time Approvals – Instant submission and approval of proposals, budgets, and event requests.
-
 ✅ Centralized Dashboard – A unified platform for all student councils to manage activities.
-
 ✅ Event Management – Plan, schedule, and track events with automated reminders.
-
 ✅ Document Sharing – Securely upload and access meeting minutes, budgets, and reports.
-
 ✅ Role-Based Access – Different permissions for council members, advisors, and administrators.
-
 ✅ Notifications & Alerts – Stay updated with real-time notifications for approvals and deadlines.
-
 ✅ Reporting & Analytics – Generate insights on council activities and resource utilization.
 Benefits
 
